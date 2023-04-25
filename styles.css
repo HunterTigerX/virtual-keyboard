@@ -1,0 +1,60 @@
+.keyboard__wrapper {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid red;
+}
+
+.keyboard__row {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5px;
+    border: 1px solid red;
+}
+
+.key {
+    width: 60px;
+    border: 1px solid red;
+    display: flex;
+    align-items: top;
+    justify-content: left;
+    position: relative;
+}
+
+.key__big {
+    width: calc(100% - 10px);
+    width: calc(100% - 10px);
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.key__small {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.key__text {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+
+.key__xsix {
+    width: calc(60px*6);
+}
+
+.key__xthree {
+    width: calc(60px*3);
+}
+
+.key__xtwo {
+    width: calc(60px*2);
+}
