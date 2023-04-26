@@ -1,5 +1,12 @@
 const rowkeysCount = [14, 15, 13, 13, 11];
-let keyboardLanguage = "En";
+let keyboardLanguage;
+
+if (localStorage.getItem('keyboardLanguage') === 'undefined') {
+  keyboardLanguage = 'En';
+  localStorage.setItem('keyboardLanguage', keyboardLanguage);
+} else {
+  keyboardLanguage = localStorage.getItem('keyboardLanguage');
+}
 
 const specialSymbols = [ //Клавиши с особыми размерами клавиш
   "BackSpace",
@@ -351,11 +358,10 @@ function fillRowsWithKeys(count, currentRow) {
   let keyboardLanguageSmallkeys;
 
   if (keyboardLanguage === 'Ru') {
-    console.log(keyboardLanguage)
     keyboardLanguageBigKeys = ruBig;
     keyboardLanguageSmallkeys = ruSmall;
   } else if (keyboardLanguage === 'En') {
-    console.log(keyboardLanguage)
+    //console.log(keyboardLanguage)
     keyboardLanguageBigKeys = engBig;
     keyboardLanguageSmallkeys = engSmall;
   }
@@ -434,8 +440,10 @@ document.addEventListener("keyup", function (event) {
 function changeLayout() {
   if (keyboardLanguage === 'Ru') {
     keyboardLanguage = 'En';
+    localStorage.setItem('keyboardLanguage', 'En');
   } else {
     keyboardLanguage = 'Ru';
+    localStorage.setItem('keyboardLanguage', 'Ru');
   }
   createKeyboard();
 }
