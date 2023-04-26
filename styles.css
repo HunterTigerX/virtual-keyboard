@@ -58,3 +58,7 @@
 .key__xtwo {
     width: calc(60px*2);
 }
+
+.key__pressed {
+    background-color: gray;
+}
