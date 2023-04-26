@@ -62,3 +62,8 @@
 .key__pressed {
     background-color: gray;
 }
+
+.input__text-from-keyboard {
+    margin: 20px;
+    width: calc(100% - 40px);
+}

@@ -333,7 +333,10 @@ const ruSmall = [
 function createKeyboardWrapper() {
   const keyboardWrapper = document.createElement("div"); //Создаём обёртку для клавиатуры
   keyboardWrapper.classList.add("keyboard__wrapper"); //Добавляем ей стили
-  document.body.append(keyboardWrapper); //Вставляем клавиатуру в документ
+  const inputWrapper = document.createElement("textarea"); //Создаём обёртку для клавиатуры
+  inputWrapper.rows = '4';
+  inputWrapper.classList.add("input__text-from-keyboard"); //Добавляем ей стили
+  document.body.append(inputWrapper, keyboardWrapper); //Вставляем клавиатуру в документ
 }
 
 function createKeyboard() {
@@ -460,6 +463,20 @@ if (navigator.keyboard) {
 } else {
   // Do something else.
 }
+
+
+
+const inputRow = document.querySelector('.input__text-from-keyboard');
+
+document.addEventListener('click', (e) => { //save focus when keyboard keys are clicked
+  if (e.target.classList.length !== 0 && e.target.classList.value !== 'keyboard__wrapper' && e.target.classList.value !== 'keyboard__row') {
+    inputRow.focus();
+  }
+  console.log(e.target.classList.length);
+
+});
+
+
 
 /*
   console.log("↑↓→←");

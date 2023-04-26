@@ -1,0 +1,29 @@
+[33mcommit 5cf21f114618e10a299e314eb45c1110a9aad664[m[33m ([m[1;36mHEAD -> [m[1;32mvirtual-keyboard[m[33m, [m[1;31morigin/virtual-keyboard[m[33m)[m
+Author: HunterTigerX <HunterTigerX@gmail.com>
+Date:   Wed Apr 26 15:19:39 2023 +0300
+
+    feat: add laguage save and detection to localstorage
+
+[33mcommit e672dad74a758963cf79e919ca64e81042849c56[m
+Author: HunterTigerX <HunterTigerX@gmail.com>
+Date:   Wed Apr 26 15:07:38 2023 +0300
+
+    feat: add russian layout and prevent some keys from staying active
+
+[33mcommit 38a0b31a9b4a680e13df17ad981fc4c5682a20dc[m
+Author: HunterTigerX <HunterTigerX@gmail.com>
+Date:   Wed Apr 26 00:59:57 2023 +0300
+
+    feat: generate basic layout, fill keyboard with keys, add event listener to respond to keyDown on keyboard, add temp style to keyboard
+
+[33mcommit c2417054facc7632ff286dd3f1c716a554c961b8[m
+Author: HunterTigerX <HunterTigerX@gmail.com>
+Date:   Mon Apr 24 21:43:28 2023 +0300
+
+    init: start virtual-keyboard task
+
+[33mcommit ab76e01365741b8498d390d569f9f723122b51a2[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: HunterTigerX <HunterTigerX@gmail.com>
+Date:   Mon Apr 24 21:24:28 2023 +0300
+
+    Initial commit
