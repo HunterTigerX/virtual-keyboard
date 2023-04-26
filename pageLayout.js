@@ -1,14 +1,15 @@
 const rowkeysCount = [14, 15, 13, 13, 11];
 let keyboardLanguage;
 
-if (localStorage.getItem('keyboardLanguage') === 'undefined') {
-  keyboardLanguage = 'En';
-  localStorage.setItem('keyboardLanguage', keyboardLanguage);
+if (localStorage.getItem("keyboardLanguage") === "undefined") {
+  keyboardLanguage = "En";
+  localStorage.setItem("keyboardLanguage", keyboardLanguage);
 } else {
-  keyboardLanguage = localStorage.getItem('keyboardLanguage');
+  keyboardLanguage = localStorage.getItem("keyboardLanguage");
 }
 
-const specialSymbols = [ //Клавиши с особыми размерами клавиш
+const specialSymbols = [
+  //Клавиши с особыми размерами клавиш
   "BackSpace",
   "Tab",
   "Del",
@@ -24,10 +25,11 @@ const specialSymbols = [ //Клавиши с особыми размерами �
   "Down",
   "Right",
   "Up",
-  "Lang"
+  "Lang",
 ];
 
-const singleKeys = [ //Клавиши без маленького текста
+const singleKeys = [
+  //Клавиши без маленького текста
   "BackSpace",
   "Tab",
   "Del",
@@ -43,11 +45,12 @@ const singleKeys = [ //Клавиши без маленького текста
   "Down",
   "Right",
   "Up",
-  "Lang"
+  "Lang",
 ];
 
 /*using keycodes*/
-const keycodesOfKeyboard = [ //Добавляем классы для работы с клавишами
+const keycodesOfKeyboard = [
+  //Добавляем классы для работы с клавишами
   [
     "Backquote",
     "Digit1",
@@ -173,11 +176,12 @@ const engSmall = [
     "Left",
     "Down",
     "Right",
-    "Lang"
+    "Lang",
   ],
 ];
 
-const engBig = [ //Большие буквы в клавиатуре и буквы с текстом
+const engBig = [
+  //Большие буквы в клавиатуре и буквы с текстом
   [
     "~",
     "!",
@@ -228,7 +232,8 @@ const engBig = [ //Большие буквы в клавиатуре и букв
   ],
 ];
 
-const ruBig = [ //Большие буквы в клавиатуре и буквы с текстом
+const ruBig = [
+  //Большие буквы в клавиатуре и буквы с текстом
   [
     "~",
     "!",
@@ -262,7 +267,7 @@ const ruBig = [ //Большие буквы в клавиатуре и букв�
     "/",
     "Del",
   ],
-  ["CapsLock", "Ф", "Ы", "В", "А", "П", "Р", "О", "Л", "Д", "Ж", 'Э', "Enter"],
+  ["CapsLock", "Ф", "Ы", "В", "А", "П", "Р", "О", "Л", "Д", "Ж", "Э", "Enter"],
   ["Shift", "Я", "Ч", "С", "М", "И", "Т", "Ь", "Б", "Ю", ",", "Up", "Shift"],
   [
     "Ctrl",
@@ -326,7 +331,7 @@ const ruSmall = [
     "Left",
     "Down",
     "Right",
-    "Lang"
+    "Lang",
   ],
 ];
 
@@ -334,14 +339,14 @@ function createKeyboardWrapper() {
   const keyboardWrapper = document.createElement("div"); //Создаём обёртку для клавиатуры
   keyboardWrapper.classList.add("keyboard__wrapper"); //Добавляем ей стили
   const inputWrapper = document.createElement("textarea"); //Создаём обёртку для клавиатуры
-  inputWrapper.rows = '4';
+  inputWrapper.rows = "4";
   inputWrapper.classList.add("input__text-from-keyboard"); //Добавляем ей стили
   document.body.append(inputWrapper, keyboardWrapper); //Вставляем клавиатуру в документ
 }
 
 function createKeyboard() {
-  const keyboardWrapper = document.querySelector('.keyboard__wrapper');
-  keyboardWrapper.innerText = '';
+  const keyboardWrapper = document.querySelector(".keyboard__wrapper");
+  keyboardWrapper.innerText = "";
   for (let i = 0; i < rowkeysCount.length; i++) {
     //Создаём ряды клавиш
     keyboardWrapper.append(fillRowsWithKeys(rowkeysCount[i], i)); //Заполняем ряд клавишами
@@ -349,21 +354,19 @@ function createKeyboard() {
 
   const languageKey = document.querySelector(".key__ChangeLanguage");
   languageKey.addEventListener("click", function () {
-  console.log('changed');
-  changeLayout();
-});
-
+    console.log("changed");
+    changeLayout();
+  });
 }
 
 function fillRowsWithKeys(count, currentRow) {
-
   let keyboardLanguageBigKeys;
   let keyboardLanguageSmallkeys;
 
-  if (keyboardLanguage === 'Ru') {
+  if (keyboardLanguage === "Ru") {
     keyboardLanguageBigKeys = ruBig;
     keyboardLanguageSmallkeys = ruSmall;
-  } else if (keyboardLanguage === 'En') {
+  } else if (keyboardLanguage === "En") {
     //console.log(keyboardLanguage)
     keyboardLanguageBigKeys = engBig;
     keyboardLanguageSmallkeys = engSmall;
@@ -392,7 +395,7 @@ function fillRowsWithKeys(count, currentRow) {
 
     if (specialSymbols.includes(name)) {
       //Добавляем классы для нестандартных клавиш
-      if (name === "Space" || name === 'Пробел') {
+      if (name === "Space" || name === "Пробел") {
         keyWrapper.classList.add(`key__xsix`);
       } else if (
         name === "BackSpace" ||
@@ -427,11 +430,13 @@ document.addEventListener("keydown", function (event) {
   document.querySelector(".key__" + event.code).style.background = "green";
   //console.log(event.code)
 
-  if (event.code === "Tab" || //Prevent keys from staying active
-    event.code === "CapsLock") {
-      event.preventDefault();
-      return;
-    }
+  if (
+    event.code === "Tab" || //Prevent keys from staying active
+    event.code === "CapsLock"
+  ) {
+    event.preventDefault();
+    return;
+  }
 });
 
 document.addEventListener("keyup", function (event) {
@@ -441,12 +446,12 @@ document.addEventListener("keyup", function (event) {
 });
 
 function changeLayout() {
-  if (keyboardLanguage === 'Ru') {
-    keyboardLanguage = 'En';
-    localStorage.setItem('keyboardLanguage', 'En');
+  if (keyboardLanguage === "Ru") {
+    keyboardLanguage = "En";
+    localStorage.setItem("keyboardLanguage", "En");
   } else {
-    keyboardLanguage = 'Ru';
-    localStorage.setItem('keyboardLanguage', 'Ru');
+    keyboardLanguage = "Ru";
+    localStorage.setItem("keyboardLanguage", "Ru");
   }
   createKeyboard();
 }
@@ -464,19 +469,30 @@ if (navigator.keyboard) {
   // Do something else.
 }
 
+let inputRow = document.querySelector(".input__text-from-keyboard");
 
-
-const inputRow = document.querySelector('.input__text-from-keyboard');
-
-document.addEventListener('click', (e) => { //save focus when keyboard keys are clicked
-  if (e.target.classList.length !== 0 && e.target.classList.value !== 'keyboard__wrapper' && e.target.classList.value !== 'keyboard__row') {
+document.addEventListener("click", (e) => {
+  //Вернуть фокус на поле ввода при нажатии на клавишу
+  if (
+    e.target.classList.length !== 0 &&
+    e.target.classList.value !== "keyboard__wrapper" &&
+    e.target.classList.value !== "keyboard__row"
+  ) {
     inputRow.focus();
   }
-  console.log(e.target.classList.length);
 
+  if (e.target.classList.contains("key")) {
+    //Если была нажата буква или знак
+    inputRow.value += e.target.firstChild.innerText;
+  } else {
+    if (
+      e.target.classList.contains("key__big") || //Елси мы нажали на вложенный элемент
+      e.target.classList.contains("key__small")
+    ) {
+      inputRow.value += e.target.parentNode.firstChild.innerText;
+    }
+  }
 });
-
-
 
 /*
   console.log("↑↓→←");
