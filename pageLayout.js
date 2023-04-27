@@ -3,6 +3,7 @@ let keyboardLanguage;
 let keyboardCapitalisation = false;
 let isShiftPressed = false;
 let isCapslockPressed = false;
+let isAltPressed = false;
 
 if (localStorage.getItem("keyboardLanguage") === "undefined") {
   keyboardLanguage = "En";
@@ -367,6 +368,13 @@ function createKeyboard() {
   } else {
     document.querySelector(`.key__CapsLock`).style.background = "none"; 
   }
+  if (isAltPressed === true) {
+    document.querySelector(`.key__AltLeft`).style.background = "green"; 
+    document.querySelector(`.key__AltRight`).style.background = "green"; 
+  } else {
+    document.querySelector(`.key__AltLeft`).style.background = "none"; 
+    document.querySelector(`.key__AltRight`).style.background = "none"; 
+  }
 
   const languageKey = document.querySelector(".key__ChangeLanguage");
   languageKey.addEventListener("click", function () {
@@ -503,6 +511,9 @@ document.addEventListener("click", (e) => {
         removeCapsLock();
       } 
     }
+    if (e.target.innerText === "Alt") {
+      altIsPressed();
+    }
   }
 
   if (e.target.classList.contains("key")) {
@@ -526,9 +537,16 @@ document.addEventListener("click", (e) => {
 });
 
 function shiftIsPressed() {
-  isShiftPressed = !isShiftPressed;
-  keyboardCapitalisation = !keyboardCapitalisation;
-  createKeyboard(); //Меняем раскладку
+  if (isAltPressed === true) {
+    keyboardCapitalisation = false;
+    isShiftPressed = false;
+    isAltPressed = false;
+    changeLayout();
+  } else {
+    isShiftPressed = !isShiftPressed;
+    keyboardCapitalisation = !keyboardCapitalisation;
+    createKeyboard(); //Меняем раскладку
+  }
 }
 
 function removeCapsLock() {
@@ -540,6 +558,18 @@ function capsLockIsPressed() {
   isCapslockPressed = !isCapslockPressed;
   keyboardCapitalisation = !keyboardCapitalisation;
   createKeyboard(); //Меняем раскладку
+}
+
+function altIsPressed() {
+  isAltPressed = !isAltPressed;
+  if (isShiftPressed === true) {
+    isAltPressed = false;
+    isShiftPressed = false;
+    keyboardCapitalisation = false;
+    changeLayout();
+  } else {
+    createKeyboard();
+  }
 }
 
 /*
