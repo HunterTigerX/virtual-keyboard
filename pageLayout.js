@@ -1,5 +1,8 @@
 const rowkeysCount = [14, 15, 13, 13, 11];
 let keyboardLanguage;
+let keyboardCapitalisation = false;
+let isShiftPressed = false;
+let isCapslockPressed = false;
 
 if (localStorage.getItem("keyboardLanguage") === "undefined") {
   keyboardLanguage = "En";
@@ -352,6 +355,19 @@ function createKeyboard() {
     keyboardWrapper.append(fillRowsWithKeys(rowkeysCount[i], i)); //Заполняем ряд клавишами
   }
 
+  if (isShiftPressed === true) {
+    document.querySelector(".key__ShiftLeft").style.background = "green";
+    document.querySelector(".key__ShiftRight").style.background = "green";
+  } else {
+    document.querySelector(".key__ShiftLeft").style.background = "none";
+    document.querySelector(".key__ShiftRight").style.background = "none";
+  }
+  if (isCapslockPressed === true) {
+    document.querySelector(`.key__CapsLock`).style.background = "green"; 
+  } else {
+    document.querySelector(`.key__CapsLock`).style.background = "none"; 
+  }
+
   const languageKey = document.querySelector(".key__ChangeLanguage");
   languageKey.addEventListener("click", function () {
     console.log("changed");
@@ -364,12 +380,22 @@ function fillRowsWithKeys(count, currentRow) {
   let keyboardLanguageSmallkeys;
 
   if (keyboardLanguage === "Ru") {
-    keyboardLanguageBigKeys = ruBig;
-    keyboardLanguageSmallkeys = ruSmall;
+    if (keyboardCapitalisation) {
+      keyboardLanguageBigKeys = ruSmall;
+      keyboardLanguageSmallkeys = ruBig;
+    } else {
+      keyboardLanguageBigKeys = ruBig;
+      keyboardLanguageSmallkeys = ruSmall;
+    }
+
   } else if (keyboardLanguage === "En") {
-    //console.log(keyboardLanguage)
-    keyboardLanguageBigKeys = engBig;
-    keyboardLanguageSmallkeys = engSmall;
+    if (keyboardCapitalisation) {
+      keyboardLanguageBigKeys = engSmall;
+      keyboardLanguageSmallkeys = engBig;
+    } else {
+      keyboardLanguageBigKeys = engBig;
+      keyboardLanguageSmallkeys = engSmall;
+    }
   }
 
   const keyboardRow = document.createElement("div"); //Создаём ряд клавиш
@@ -426,10 +452,8 @@ createKeyboardWrapper();
 createKeyboard();
 
 document.addEventListener("keydown", function (event) {
-  changeStyleOfPressedKey(event);
   document.querySelector(".key__" + event.code).style.background = "green";
   //console.log(event.code)
-
   if (
     event.code === "Tab" || //Prevent keys from staying active
     event.code === "CapsLock"
@@ -441,7 +465,6 @@ document.addEventListener("keydown", function (event) {
 
 document.addEventListener("keyup", function (event) {
   console.log(event.key, event.code);
-  changeStyleOfPressedKey(event);
   document.querySelector(".key__" + event.code).style.background = "none";
 });
 
@@ -456,19 +479,6 @@ function changeLayout() {
   createKeyboard();
 }
 
-function changeStyleOfPressedKey(event) {
-  // console.log( document.querySelector(".key__" + event.code));
-  // document.querySelector(".key__" + event.code).classList.toggle("key__pressed")
-}
-
-if (navigator.keyboard) {
-  const keyboard = navigator.keyboard;
-  console.log();
-  keyboard.getLayoutMap();
-} else {
-  // Do something else.
-}
-
 let inputRow = document.querySelector(".input__text-from-keyboard");
 
 document.addEventListener("click", (e) => {
@@ -481,18 +491,56 @@ document.addEventListener("click", (e) => {
     inputRow.focus();
   }
 
+  if (e.target.classList.contains("key__text")) {
+    if (e.target.innerText === "Shift") {
+      shiftIsPressed();
+      //Если нажат Шифт
+    }
+    if (e.target.innerText === "CapsLock") {
+      //Если нажат Капслок
+      capsLockIsPressed(e.target.parentNode.classList[1]);
+      if (!isCapslockPressed) {
+        removeCapsLock();
+      } 
+    }
+  }
+
   if (e.target.classList.contains("key")) {
     //Если была нажата буква или знак
     inputRow.value += e.target.firstChild.innerText;
+    if (isShiftPressed) { //Если нажат шифт
+      shiftIsPressed();
+    } 
+
   } else {
     if (
       e.target.classList.contains("key__big") || //Елси мы нажали на вложенный элемент
       e.target.classList.contains("key__small")
     ) {
       inputRow.value += e.target.parentNode.firstChild.innerText;
+      if (isShiftPressed) { //Если нажат шифт
+        shiftIsPressed();
+      } 
     }
   }
 });
+
+function shiftIsPressed() {
+  isShiftPressed = !isShiftPressed;
+  keyboardCapitalisation = !keyboardCapitalisation;
+  createKeyboard(); //Меняем раскладку
+}
+
+function removeCapsLock() {
+  const capsLockKey = document.querySelector(".key__CapsLock");
+  capsLockKey.style.background = "none";
+}
+
+function capsLockIsPressed() {
+  isCapslockPressed = !isCapslockPressed;
+  keyboardCapitalisation = !keyboardCapitalisation;
+  createKeyboard(); //Меняем раскладку
+}
 
 /*
   console.log("↑↓→←");
