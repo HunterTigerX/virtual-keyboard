@@ -24,6 +24,7 @@
     align-items: top;
     justify-content: left;
     position: relative;
+    text-align: center;
 }
 
 .key__big {
@@ -54,6 +55,7 @@
     align-items: center;
     width: 100%;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .key__xsix {
@@ -75,4 +77,22 @@
 .input__text-from-keyboard {
     margin: 20px;
     width: calc(100% - 40px);
+}
+
+.keyboard__status-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 10px auto;
+}
+
+.div__status-block {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.span__result {
+    display: inline-block;
+    text-indent: 5px;
 }
