@@ -569,6 +569,10 @@ document.addEventListener("click", (e) => {
       arrowsModeOn = !arrowsModeOn;
       updateStatus();
     }
+    if (e.target.innerText === "Tab") {
+      tabVKeyIsPressed();
+      //Если нажат Шифт
+    }
     if (e.target.innerText === "Left") {
       isArrowKeyPressed = true;
       if (!arrowsModeOn) {
@@ -895,7 +899,7 @@ document
   });
 
 document
-  .querySelector(".key__ArrowLeft")
+  .querySelector(".key__ArrowLeft") 
   .addEventListener("mousedown", (event) => {
     event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
   });
@@ -905,3 +909,13 @@ document
   .addEventListener("mousedown", (event) => {
     event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
   });
+
+  function tabVKeyIsPressed() {
+    const input = document.querySelector(".input__text-from-keyboard");
+    let leftHalf = input.value.slice(0, lastPosition);
+    let rightHalf = input.value.slice(lastPosition, input.length);
+    input.value = `${leftHalf}${"\t"}${rightHalf}`;
+    lastPosition += 1;
+    input.focus();
+    input.setSelectionRange(lastPosition, lastPosition);
+  }
