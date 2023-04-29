@@ -5,6 +5,7 @@
     flex-direction: column;
     gap: 20px;
     border: 1px solid red;
+    user-select: none;
 }
 
 .keyboard__row {
@@ -77,6 +78,7 @@
 .input__text-from-keyboard {
     margin: 20px;
     width: calc(100% - 40px);
+    width: 150px;
 }
 
 .keyboard__status-wrapper {
@@ -95,4 +97,8 @@
 .span__result {
     display: inline-block;
     text-indent: 5px;
+}
+
+.input__text-from-keyboard-clone {
+    opacity: 0;
 }

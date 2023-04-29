@@ -6,8 +6,9 @@ let isCapslockPressed = false;
 let isAltPressed = false;
 let arrowsModeOn = false;
 let lastPosition = 0;
-let inputLength = 0;
+//let inputLength = 0;
 let selectedText = false;
+let isArrowKeyPressed = false;
 
 if (localStorage.getItem("keyboardLanguage") === "undefined") {
   keyboardLanguage = "En";
@@ -136,7 +137,7 @@ const keycodesOfKeyboard = [
     "ArrowDown",
     "ArrowRight",
     "ChangeLanguage",
-    "arrowsMode"
+    "arrowsMode",
   ],
 ];
 
@@ -361,22 +362,29 @@ function createKeyboardWrapper() {
   keyboardStatus.classList.add("keyboard__status-wrapper"); //Добавляем ей стили
 
   const keyboardStatusLanguage = document.createElement("div"); //Создаём панель статуса языка
-  keyboardStatusLanguage.classList.add('div__status-block');
+  keyboardStatusLanguage.classList.add("div__status-block");
   const keyboardStatusLanguageText1 = document.createElement("span"); //Создаём панель статуса языка
   keyboardStatusLanguageText1.innerText = `Текущий язык: `;
   const keyboardStatusLanguageText2 = document.createElement("span"); //Создаём панель статуса языка
-  keyboardStatusLanguageText2.classList.add('span__result');
-  keyboardStatusLanguage.append(keyboardStatusLanguageText1, keyboardStatusLanguageText2);
+  keyboardStatusLanguageText2.classList.add("span__result");
+  keyboardStatusLanguage.append(
+    keyboardStatusLanguageText1,
+    keyboardStatusLanguageText2
+  );
 
   const keyboardStatusArrows = document.createElement("div"); //Создаём панель статуса стрелочек
-  keyboardStatusArrows.classList.add('div__status-block');
+  keyboardStatusArrows.classList.add("div__status-block");
   const keyboardStatusArrowsText1 = document.createElement("span"); //Создаём панель статуса языка
   keyboardStatusArrowsText1.innerText = `Стрелочки`;
   const keyboardStatusArrowsText2 = document.createElement("span"); //Создаём панель статуса языка
-  keyboardStatusArrowsText2.classList.add('span__result');
-  keyboardStatusArrows.append(keyboardStatusArrowsText1, keyboardStatusArrowsText2);
+  keyboardStatusArrowsText2.classList.add("span__result");
+  keyboardStatusArrows.append(
+    keyboardStatusArrowsText1,
+    keyboardStatusArrowsText2
+  );
 
   keyboardStatus.append(keyboardStatusLanguage, keyboardStatusArrows);
+
   document.body.append(inputWrapper, keyboardStatus, keyboardWrapper); //Вставляем клавиатуру в документ
 }
 
@@ -396,16 +404,16 @@ function createKeyboard() {
     document.querySelector(".key__ShiftRight").style.background = "none";
   }
   if (isCapslockPressed === true) {
-    document.querySelector(`.key__CapsLock`).style.background = "green"; 
+    document.querySelector(`.key__CapsLock`).style.background = "green";
   } else {
-    document.querySelector(`.key__CapsLock`).style.background = "none"; 
+    document.querySelector(`.key__CapsLock`).style.background = "none";
   }
   if (isAltPressed === true) {
-    document.querySelector(`.key__AltLeft`).style.background = "green"; 
-    document.querySelector(`.key__AltRight`).style.background = "green"; 
+    document.querySelector(`.key__AltLeft`).style.background = "green";
+    document.querySelector(`.key__AltRight`).style.background = "green";
   } else {
-    document.querySelector(`.key__AltLeft`).style.background = "none"; 
-    document.querySelector(`.key__AltRight`).style.background = "none"; 
+    document.querySelector(`.key__AltLeft`).style.background = "none";
+    document.querySelector(`.key__AltRight`).style.background = "none";
   }
 
   const languageKey = document.querySelector(".key__ChangeLanguage");
@@ -427,7 +435,6 @@ function fillRowsWithKeys(count, currentRow) {
       keyboardLanguageBigKeys = ruBig;
       keyboardLanguageSmallkeys = ruSmall;
     }
-
   } else if (keyboardLanguage === "En") {
     if (keyboardCapitalisation) {
       keyboardLanguageBigKeys = engSmall;
@@ -475,7 +482,7 @@ function fillRowsWithKeys(count, currentRow) {
       } else {
         bigKey.classList.add(`key__xone`);
       }
-      bigKey.classList.add(`key__text`); //
+      bigKey.classList.add(`key__text`);
     } else {
       bigKey.classList.add("key__big");
     }
@@ -492,6 +499,7 @@ createKeyboardWrapper();
 createKeyboard();
 
 document.addEventListener("keydown", function (event) {
+  //Когда нажимается кнопка на клавиатуре, подсвечиваем кнопку на виртуальной клавиатуре
   document.querySelector(".key__" + event.code).style.background = "green";
   if (
     event.code === "Tab" || //Prevent keys from staying active
@@ -500,6 +508,8 @@ document.addEventListener("keydown", function (event) {
     event.preventDefault();
     return;
   }
+
+  checkIfEmulateKeysWerePressed();
 });
 
 document.addEventListener("keyup", function (event) {
@@ -520,11 +530,17 @@ function changeLayout() {
 let inputRow = document.querySelector(".input__text-from-keyboard");
 
 document.addEventListener("click", (e) => {
-
-  if (document.activeElement === document.querySelector(".input__text-from-keyboard")) { //Сохранить фокус
-    lastPosition = document.querySelector('.input__text-from-keyboard').selectionStart;
+  //console.log(e)
+  if (
+    document.activeElement ===
+    document.querySelector(".input__text-from-keyboard")
+  ) {
+    //Сохранить фокус
+    lastPosition = document.querySelector(
+      ".input__text-from-keyboard"
+    ).selectionStart;
   }
-  
+
   //Вернуть фокус на поле ввода при нажатии на клавишу
   if (
     e.target.classList.length !== 0 &&
@@ -544,7 +560,7 @@ document.addEventListener("click", (e) => {
       capsLockIsPressed(e.target.parentNode.classList[1]);
       if (!isCapslockPressed) {
         removeCapsLock();
-      } 
+      }
     }
     if (e.target.innerText === "Alt") {
       altIsPressed();
@@ -554,62 +570,136 @@ document.addEventListener("click", (e) => {
       updateStatus();
     }
     if (e.target.innerText === "Left") {
+      isArrowKeyPressed = true;
       if (!arrowsModeOn) {
-        var eventObj = document.createEvent("Events");
-        eventObj.initEvent("keydown", true, true);
-        eventObj.which = 37;
-      //  el.dispatchEvent(eventObj);
+        if (lastPosition > 0) {
+          lastPosition -= 1;
+        }
+        console.log(lastPosition);
+
+        const input = document.querySelector(".input__text-from-keyboard");
+        input.focus();
+        input.setSelectionRange(lastPosition, lastPosition);
+
+        let simulateKey = new KeyboardEvent("keydown", {
+          key: "ArrowLeft",
+          keyCode: 37,
+          which: 37,
+          code: "ArrowLeft",
+          location: 0,
+          altKey: false,
+          ctrlKey: false,
+          metaKey: false,
+          shiftKey: false,
+          repeat: false,
+        });
+        document.dispatchEvent(simulateKey);
       } else {
-        inputRow.value += `←`
+        printCharacter(`←`);
       }
     }
     if (e.target.innerText === "Down") {
-            if (!arrowsModeOn) {
-
+      isArrowKeyPressed = true;
+      if (!arrowsModeOn) {
+        // const input = document.querySelector('.input__text-from-keyboard');
+        // input.focus();
+        // input.setSelectionRange(lastPosition, lastPosition);
+        // console.log(window.getSelection().toString())
+        // console.log(input.getSelection().toString())
+        // let simulateKey = new KeyboardEvent("keydown", {
+        //   key: "ArrowDown",
+        //   keyCode: 40,
+        //   which: 40,
+        //   code: "ArrowDown",
+        //   location: 0,
+        //   altKey: false,
+        //   ctrlKey: false,
+        //   metaKey: false,
+        //   shiftKey: false,
+        //   repeat: false,
+        // });
+        // document.dispatchEvent(simulateKey);
       } else {
-        inputRow.value += `↓`
+        printCharacter(`↓`);
       }
     }
     if (e.target.innerText === "Right") {
+      isArrowKeyPressed = true;
       if (!arrowsModeOn) {
+        if (lastPosition >= 0) {
+          lastPosition += 1;
+        }
+        console.log(lastPosition);
 
+        const input = document.querySelector(".input__text-from-keyboard");
+        input.focus();
+        input.setSelectionRange(lastPosition, lastPosition);
+
+        let simulateKey = new KeyboardEvent("keydown", {
+          key: "ArrowRight",
+          keyCode: 39,
+          which: 39,
+          code: "ArrowRight",
+          location: 0,
+          altKey: false,
+          ctrlKey: false,
+          metaKey: false,
+          shiftKey: false,
+          repeat: false,
+        });
+
+        document.dispatchEvent(simulateKey);
       } else {
-        inputRow.value += `→`
+        printCharacter(`→`);
       }
     }
     if (e.target.innerText === "Up") {
+      isArrowKeyPressed = true;
       if (!arrowsModeOn) {
-
+        // let simulateKey = new KeyboardEvent("keydown", {
+        //   key: "ArrowUp",
+        //   keyCode: 38,
+        //   which: 38,
+        //   code: "ArrowUp",
+        //   location: 0,
+        //   altKey: false,
+        //   ctrlKey: false,
+        //   metaKey: false,
+        //   shiftKey: false,
+        //   repeat: false,
+        // });
+        //  input.focus();
+        //  console.log(simulateKey)
+        //  document.dispatchEvent(simulateKey);
+        //input.dispatchEvent(simulateKey2);
       } else {
         printCharacter(`↑`);
-        //inputRow.value += `↑`
       }
     }
-
   }
 
   if (e.target.classList.contains("key")) {
     //Если была нажата буква или знак
     //inputRow.focus();
     printCharacter(e.target.firstChild.innerText);
-    if (isShiftPressed) { //Если нажат шифт
+    if (isShiftPressed) {
+      //Если нажат шифт
       shiftIsPressed();
-    } 
-
+    }
   } else {
     if (
       e.target.classList.contains("key__big") || //Елси мы нажали на вложенный элемент
       e.target.classList.contains("key__small")
     ) {
       printCharacter(e.target.parentNode.firstChild.innerText);
-      if (isShiftPressed) { //Если нажат шифт
+      if (isShiftPressed) {
+        //Если нажат шифт
         shiftIsPressed();
-      } 
+      }
     }
   }
-  
 
-// console.log(document.querySelector('.input__text-from-keyboard').selectionStart.focus())
+  // console.log(document.querySelector('.input__text-from-keyboard').selectionStart.focus())
 });
 
 function shiftIsPressed() {
@@ -649,63 +739,169 @@ function altIsPressed() {
 }
 
 function updateStatus() {
-  if (keyboardLanguage === 'Ru') {
-    document.querySelector(".keyboard__status-wrapper").firstChild.firstChild.innerText = 'Текущий язык:';
-    document.querySelector(".keyboard__status-wrapper").firstChild.lastChild.innerText = 'Русский язык';
+  if (keyboardLanguage === "Ru") {
+    document.querySelector(
+      ".keyboard__status-wrapper"
+    ).firstChild.firstChild.innerText = "Текущий язык:";
+    document.querySelector(
+      ".keyboard__status-wrapper"
+    ).firstChild.lastChild.innerText = "Русский язык";
   } else {
-    document.querySelector(".keyboard__status-wrapper").firstChild.firstChild.innerText = 'Current language:';
-    document.querySelector(".keyboard__status-wrapper").firstChild.lastChild.innerText = ' English Language';
+    document.querySelector(
+      ".keyboard__status-wrapper"
+    ).firstChild.firstChild.innerText = "Current language:";
+    document.querySelector(
+      ".keyboard__status-wrapper"
+    ).firstChild.lastChild.innerText = " English Language";
   }
   if (arrowsModeOn === false) {
-    if (keyboardLanguage === 'Ru') {
-      document.querySelector(".keyboard__status-wrapper").lastChild.firstChild.innerText = `Стрелочки:`;
-      document.querySelector(".keyboard__status-wrapper").lastChild.lastChild.innerText = ' Верх Низ Лево Право';
+    if (keyboardLanguage === "Ru") {
+      document.querySelector(
+        ".keyboard__status-wrapper"
+      ).lastChild.firstChild.innerText = `Стрелочки:`;
+      document.querySelector(
+        ".keyboard__status-wrapper"
+      ).lastChild.lastChild.innerText = " Верх Низ Лево Право";
     } else {
-      document.querySelector(".keyboard__status-wrapper").lastChild.firstChild.textContent = 'Arrows:';
-      document.querySelector(".keyboard__status-wrapper").lastChild.lastChild.textContent = ' Up Down Left Right';
+      document.querySelector(
+        ".keyboard__status-wrapper"
+      ).lastChild.firstChild.textContent = "Arrows:";
+      document.querySelector(
+        ".keyboard__status-wrapper"
+      ).lastChild.lastChild.textContent = " Up Down Left Right";
     }
   } else {
-    if (keyboardLanguage === 'Ru') {
-      document.querySelector(".keyboard__status-wrapper").lastChild.firstChild.innerText = 'Стрелочки:';
-      document.querySelector(".keyboard__status-wrapper").lastChild.lastChild.innerText = '↑ ↓ ← →';
+    if (keyboardLanguage === "Ru") {
+      document.querySelector(
+        ".keyboard__status-wrapper"
+      ).lastChild.firstChild.innerText = "Стрелочки:";
+      document.querySelector(
+        ".keyboard__status-wrapper"
+      ).lastChild.lastChild.innerText = "↑ ↓ ← →";
     } else {
-      document.querySelector(".keyboard__status-wrapper").lastChild.firstChild.innerText = 'Arrows:';
-      document.querySelector(".keyboard__status-wrapper").lastChild.lastChild.innerText = '↑ ↓ ← →';
+      document.querySelector(
+        ".keyboard__status-wrapper"
+      ).lastChild.firstChild.innerText = "Arrows:";
+      document.querySelector(
+        ".keyboard__status-wrapper"
+      ).lastChild.lastChild.innerText = "↑ ↓ ← →";
     }
   }
 }
 
 function printCharacter(character) {
-
-  if (lastPosition === 0) { //После выделения selectionStart возвращает 0. Проводим двойную проверку последнего положения курсора.
-    lastPosition = document.querySelector('.input__text-from-keyboard').selectionStart;
+  if (lastPosition === 0) {
+    //После выделения selectionStart возвращает 0. Проводим двойную проверку последнего положения курсора.
+    lastPosition = document.querySelector(
+      ".input__text-from-keyboard"
+    ).selectionStart;
   }
 
-  const input = document.querySelector('.input__text-from-keyboard');
+  const input = document.querySelector(".input__text-from-keyboard");
   let leftHalf, rightHalf;
 
- if (selectedText !== false) { //Если был выделен текст
-  leftHalf = input.value.slice(0, lastPosition);
-  rightHalf = input.value.slice(lastPosition + selectedText.length, input.length);
-  selectedText = false;
- } else {
-  leftHalf = input.value.slice(0, lastPosition);
-  rightHalf = input.value.slice(lastPosition, input.value.length);
- }
- inputRow.value = `${leftHalf}${character}${rightHalf}`;
- lastPosition+=1;
- input.focus();
- input.setSelectionRange(lastPosition, lastPosition);
+  if (selectedText !== false) {
+    //Если был выделен текст
+    leftHalf = input.value.slice(0, lastPosition);
+    rightHalf = input.value.slice(
+      lastPosition + selectedText.length,
+      input.length
+    );
+    selectedText = false;
+  } else {
+    leftHalf = input.value.slice(0, lastPosition);
+    rightHalf = input.value.slice(lastPosition, input.value.length);
+  }
+  inputRow.value = `${leftHalf}${character}${rightHalf}`;
+  lastPosition += 1;
+  input.focus();
+  input.setSelectionRange(lastPosition, lastPosition);
 }
 
-document.querySelector('.input__text-from-keyboard').addEventListener('input', function() { //При вводе текста с клавиатуры обновляем значения
-  lastPosition = document.querySelector('.input__text-from-keyboard').selectionStart;
-  inputLength = document.querySelector('.input__text-from-keyboard').value.length;
-})
+document
+  .querySelector(".input__text-from-keyboard")
+  .addEventListener("input", function () {
+    //При вводе текста с клавиатуры обновляем значения
+    lastPosition = document.querySelector(
+      ".input__text-from-keyboard"
+    ).selectionStart;
+    //inputLength = document.querySelector(".input__text-from-keyboard").value.length;
+  });
 
-document.addEventListener('mouseup', function(e){
-  if(document.activeElement === document.querySelector(".input__text-from-keyboard")) {
+document.addEventListener("mouseup", function () {
+  if (
+    document.activeElement ===
+    document.querySelector(".input__text-from-keyboard")
+  ) {
     selectedText = window.getSelection().toString();
     lastPosition = window.getSelection().focusOffset;
-  } 
-})
+  }
+});
+
+window.addEventListener("mousedown", (event) => {
+  changeStyleOnClick(event.target);
+});
+
+function changeStyleOnClick(event) {
+  let targetedKeyClass = event.classList;
+  let eventTarget = event;
+
+  if (
+    targetedKeyClass.contains("key__big") ||
+    targetedKeyClass.contains("key__small")
+  ) {
+    eventTarget.parentNode.style.background = "green";
+  } else if (
+    targetedKeyClass.contains("key__text") ||
+    targetedKeyClass.contains("key")
+  ) {
+    eventTarget.style.background = "green";
+  }
+  window.addEventListener("mouseup", function () {
+    if (
+      targetedKeyClass.contains("key__big") ||
+      targetedKeyClass.contains("key__small")
+    ) {
+      eventTarget.parentNode.style.background = "none";
+    } else if (
+      targetedKeyClass.contains("key__text") ||
+      targetedKeyClass.contains("key")
+    ) {
+      eventTarget.style.background = "none";
+    }
+  });
+}
+
+function checkIfEmulateKeysWerePressed() {
+  if (isArrowKeyPressed === true) {
+    document.querySelector(".key__ArrowDown").style.background = "none";
+    document.querySelector(".key__ArrowUp").style.background = "none";
+    document.querySelector(".key__ArrowLeft").style.background = "none";
+    document.querySelector(".key__ArrowRight").style.background = "none";
+    isArrowKeyPressed = false;
+  }
+}
+
+document
+  .querySelector(".key__ArrowDown")
+  .addEventListener("mousedown", (event) => {
+    event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
+  });
+
+document
+  .querySelector(".key__ArrowUp")
+  .addEventListener("mousedown", (event) => {
+    event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
+  });
+
+document
+  .querySelector(".key__ArrowLeft")
+  .addEventListener("mousedown", (event) => {
+    event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
+  });
+
+document
+  .querySelector(".key__ArrowRight")
+  .addEventListener("mousedown", (event) => {
+    event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
+  });
