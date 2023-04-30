@@ -102,3 +102,9 @@
 .input__text-from-keyboard-clone {
     opacity: 0;
 }
+
+.div__os-block {
+    height: 10px;
+    margin: 10px auto;
+    text-align: center;
+}

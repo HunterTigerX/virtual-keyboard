@@ -505,8 +505,11 @@ window.addEventListener("load", function () {
       keyboardStatusArrowsText2
     );
 
+    const keyboardOS = document.createElement("div"); //Создаём панель статуса языка
+    keyboardOS.classList.add("div__os-block");
+
     keyboardStatus.append(keyboardStatusLanguage, keyboardStatusArrows);
-    document.body.append(inputWrapper, keyboardStatus, keyboardWrapper); //Вставляем клавиатуру в документ
+    document.body.append(inputWrapper, keyboardStatus, keyboardOS, keyboardWrapper); //Вставляем клавиатуру в документ
   }
 
   function createKeyboard() {
@@ -558,6 +561,12 @@ window.addEventListener("load", function () {
       changeLanguage();
       returnFocus();
     });
+
+    if (keyboardLanguage === 'Ru') {
+      document.querySelector('.div__os-block').innerText = 'Клавиатура была создана под/для ОС Виндоус'
+    } else {
+      document.querySelector('.div__os-block').innerText = 'The keyboard was created in and for Windows OS'
+    }
 
     updateStatus();
   }
