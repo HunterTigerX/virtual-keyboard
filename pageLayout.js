@@ -723,6 +723,36 @@ window.addEventListener("load", function () {
 
   /* Таб выше */
 
+/* Enter ниже */
+document.addEventListener("keydown", function (event) {
+  if (event.code === "Enter") {
+    lastPosition += 1;
+  }
+});
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("key__text")) {
+    if (e.target.innerText === "Enter") {
+      EnterIsPressed();
+      //Если нажат Шифт
+    }
+  }
+});
+
+function EnterIsPressed() {
+  const input = document.querySelector(".input__text-from-keyboard");
+  let leftHalf = input.value.slice(0, lastPosition);
+  let rightHalf = input.value.slice(lastPosition, input.length);
+  input.value = `${leftHalf}${"\r\n"}${rightHalf}`;
+  lastPosition += 1;
+  returnFocus();
+}
+
+
+/* Enter выше */
+
+
+
   /* Шифты ниже */
   document.addEventListener("keydown", function (event) {
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
@@ -929,7 +959,7 @@ window.addEventListener("load", function () {
       }
     });
 
-    document.addEventListener("click", (e) => {
+    document.addEventListener("click", () => {
       // if (e.target.classList.contains("key__text")) {
       //   console.log(e.target.innerText)
       //   if (e.target.innerText === "BackSpace") {
@@ -997,7 +1027,7 @@ window.addEventListener("load", function () {
           }
         });
     
-        document.addEventListener("click", (e) => {
+        document.addEventListener("click", () => {
           // if (e.target.classList.contains("key__text")) {
           //   console.log(e.target.innerText)
           //   if (e.target.innerText === "Del") {
