@@ -65,6 +65,8 @@ window.addEventListener("load", function () {
   let doNotChangeLang = false;
   let isCtrlPressed = false;
   let isWinPressed = false;
+  let isBackSpaceClicked = false;
+  let keyboardBackSpaceWasPressed = false;
 
   if (localStorage.getItem("keyboardLanguage") === "undefined") {
     keyboardLanguage = "En";
@@ -496,7 +498,6 @@ window.addEventListener("load", function () {
     );
 
     keyboardStatus.append(keyboardStatusLanguage, keyboardStatusArrows);
-    console.log(document.body);
     document.body.append(inputWrapper, keyboardStatus, keyboardWrapper); //Вставляем клавиатуру в документ
   }
 
@@ -907,6 +908,76 @@ window.addEventListener("load", function () {
   }
   /* WIN выше */
 
+    /* BackSpace ниже */
+
+    document.addEventListener("keydown", function (event) {
+      if (event.code === "Backspace") {
+        keyboardBackSpaceWasPressed = true;
+        backSpaceIsPressed();
+      }
+    });
+  
+    document.addEventListener("keyup", function (event) {
+      if (event.code === "Backspace") {
+        keyboardBackSpaceWasPressed = false;
+        const input = document.querySelector(".input__text-from-keyboard");
+        lastPosition = input.selectionStart;
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      // if (e.target.classList.contains("key__text")) {
+      //   console.log(e.target.innerText)
+      //   if (e.target.innerText === "BackSpace") {
+      //     runBSNTimes();
+      //    // console.log(lastPosition)
+      //   //  backSpaceIsPressed();
+      //   }
+      // }
+    });
+
+    document.addEventListener('mousedown', function(e) {
+      if (e.target.classList.contains("key__text")) {
+        if (e.target.innerText === "BackSpace") {
+          runBSNTimes();
+        }
+      }
+    })
+
+    let runBS;
+
+    function runBSNTimes() {
+      runBS = setInterval(backSpaceIsPressed, 100);
+    }
+  
+    document.addEventListener('mouseup', function() {
+      clearInterval(runBS);
+      if (isBackSpaceClicked === false) {
+        backSpaceIsPressed();
+      }
+      isBackSpaceClicked = false;
+    })
+  
+
+    function backSpaceIsPressed() {
+      isBackSpaceClicked = true;
+      const input = document.querySelector(".input__text-from-keyboard");
+      if (keyboardBackSpaceWasPressed !== true) {  
+
+          let leftHalf = input.value.slice(0, lastPosition - 1);
+          let rightHalf = input.value.slice(lastPosition, input.length);
+          input.value = `${leftHalf}${rightHalf}`;
+          if (lastPosition > 0) {lastPosition -= 1;}
+          returnFocus();
+      }
+    }
+  
+
+      
+
+
+    /* BackSpace выше */
+
   /* Стелочки ниже */
 
   document.addEventListener("click", (e) => {
@@ -1090,8 +1161,6 @@ window.addEventListener("load", function () {
         }
       }
     }
-
-    // console.log(document.querySelector('.input__text-from-keyboard').selectionStart.focus())
   });
 
   function updateStatus() {
@@ -1203,19 +1272,23 @@ window.addEventListener("load", function () {
 
     if (
       targetedKeyClass.contains("key__big") ||
-      targetedKeyClass.contains("key__small")
+      targetedKeyClass.contains("key__small") || 
+      targetedKeyClass.contains("key__text")
     ) {
       eventTarget.parentNode.style.background = "green";
     } else if (
-      targetedKeyClass.contains("key__text") ||
       targetedKeyClass.contains("key")
     ) {
       eventTarget.style.background = "green";
-    }
+    } 
+
+
+
     window.addEventListener("mouseup", function () {
       if (
         targetedKeyClass.contains("key__big") ||
-        targetedKeyClass.contains("key__small")
+        targetedKeyClass.contains("key__small") || 
+      targetedKeyClass.contains("key__text")
       ) {
         eventTarget.parentNode.style.background = "none";
       } else if (
