@@ -66,7 +66,11 @@ window.addEventListener("load", function () {
   let isCtrlPressed = false;
   let isWinPressed = false;
   let isBackSpaceClicked = false;
+  let isBackSpaceHold = false;
   let keyboardBackSpaceWasPressed = false;
+  let isDelClicked = false;
+  let isDelHold = false;
+  let keyboardDelWasPressed = false;
 
   if (localStorage.getItem("keyboardLanguage") === "undefined") {
     keyboardLanguage = "En";
@@ -906,7 +910,7 @@ window.addEventListener("load", function () {
       document.querySelector(".key__MetaRight").style.background = "none";
     }
   }
-  /* WIN выше */
+    /* WIN выше */
 
     /* BackSpace ниже */
 
@@ -939,6 +943,7 @@ window.addEventListener("load", function () {
     document.addEventListener('mousedown', function(e) {
       if (e.target.classList.contains("key__text")) {
         if (e.target.innerText === "BackSpace") {
+          isBackSpaceClicked = true;
           runBSNTimes();
         }
       }
@@ -952,15 +957,16 @@ window.addEventListener("load", function () {
   
     document.addEventListener('mouseup', function() {
       clearInterval(runBS);
-      if (isBackSpaceClicked === false) {
+      if (isBackSpaceHold === false && isBackSpaceClicked === true) {
         backSpaceIsPressed();
       }
       isBackSpaceClicked = false;
+      isBackSpaceHold = false;
     })
   
 
     function backSpaceIsPressed() {
-      isBackSpaceClicked = true;
+      isBackSpaceHold = true;
       const input = document.querySelector(".input__text-from-keyboard");
       if (keyboardBackSpaceWasPressed !== true) {  
 
@@ -971,21 +977,87 @@ window.addEventListener("load", function () {
           returnFocus();
       }
     }
-  
-
-      
-
 
     /* BackSpace выше */
+
+        /* Del ниже */
+
+        document.addEventListener("keydown", function (event) {
+          if (event.code === "Del") {
+            keyboardDelWasPressed = true;
+            DelIsPressed();
+          }
+        });
+      
+        document.addEventListener("keyup", function (event) {
+          if (event.code === "Delete") {
+            keyboardDelWasPressed = false;
+            const input = document.querySelector(".input__text-from-keyboard");
+            lastPosition = input.selectionStart;
+          }
+        });
+    
+        document.addEventListener("click", (e) => {
+          // if (e.target.classList.contains("key__text")) {
+          //   console.log(e.target.innerText)
+          //   if (e.target.innerText === "Del") {
+          //     runBSNTimes();
+          //    // console.log(lastPosition)
+          //   //  DelIsPressed();
+          //   }
+          // }
+        });
+    
+        document.addEventListener('mousedown', function(e) {
+          if (e.target.classList.contains("key__text")) {
+            if (e.target.innerText === "Del") {
+              isDelClicked = true;
+              runDelNTimes();
+            }
+          }
+        })
+    
+        let runDel;
+    
+        function runDelNTimes() {
+          runDel = setInterval(DelIsPressed, 100);
+        }
+      
+        document.addEventListener('mouseup', function() {
+          clearInterval(runDel);
+          if (isDelHold === false && isDelClicked === true) {
+            DelIsPressed();
+          }
+          isDelClicked = false;
+          isDelHold = false;
+        })
+      
+    
+        function DelIsPressed() {
+          isDelHold = true;
+          const input = document.querySelector(".input__text-from-keyboard");
+          if (keyboardDelWasPressed !== true) {  
+    
+              let leftHalf = input.value.slice(0, lastPosition);
+              let rightHalf = input.value.slice(lastPosition + 1, input.length);
+              input.value = `${leftHalf}${rightHalf}`;
+              returnFocus();
+          }
+        }
+    
+        /* Del выше */
 
   /* Стелочки ниже */
 
   document.addEventListener("click", (e) => {
     if (e.target.classList.contains("key__text")) {
+     // console.log('here')
       if (e.target.innerText === "Arrows mode") {
         arrowsModeOn = !arrowsModeOn;
         updateStatus();
       }
+
+
       if (e.target.innerText === "Left") {
         isArrowKeyPressed = true;
         if (!arrowsModeOn) {
@@ -1011,6 +1083,8 @@ window.addEventListener("load", function () {
           printCharacter(`←`);
         }
       }
+
+
       if (e.target.innerText === "Down") {
         isArrowKeyPressed = true;
         if (!arrowsModeOn) {
@@ -1036,6 +1110,8 @@ window.addEventListener("load", function () {
           printCharacter(`↓`);
         }
       }
+
+
       if (e.target.innerText === "Right") {
         isArrowKeyPressed = true;
         if (!arrowsModeOn) {
@@ -1061,6 +1137,8 @@ window.addEventListener("load", function () {
           printCharacter(`→`);
         }
       }
+
+
       if (e.target.innerText === "Up") {
         isArrowKeyPressed = true;
         if (!arrowsModeOn) {
@@ -1084,6 +1162,8 @@ window.addEventListener("load", function () {
           printCharacter(`↑`);
         }
       }
+
+
     }
   });
 
