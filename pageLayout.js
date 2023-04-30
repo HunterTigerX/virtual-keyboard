@@ -97,7 +97,9 @@ window.addEventListener("load", function () {
     "Right",
     "Up",
     "Lang",
+    "Язык",
     "Arrows mode",
+    "Режим стрелочек",
   ];
 
   const singleKeys = [
@@ -118,7 +120,9 @@ window.addEventListener("load", function () {
     "Right",
     "Up",
     "Lang",
+    "Язык",
     "Arrows mode",
+    "Режим стрелочек",
   ];
 
   //using keycodes
@@ -398,8 +402,8 @@ window.addEventListener("load", function () {
       "Left",
       "Down",
       "Right",
-      "Lang",
-      "Arrows mode",
+      "Язык",
+      "Режим стрелочек",
     ],
   ];
 
@@ -464,8 +468,8 @@ window.addEventListener("load", function () {
       "Left",
       "Down",
       "Right",
-      "Lang",
-      "Arrows mode",
+      "Язык",
+      "Режим стрелочек",
     ],
   ];
 
@@ -1083,7 +1087,7 @@ function EnterIsPressed() {
     if (e.target.classList.contains("key__text")) {
       console.log('here')
       console.log(lastPosition)
-      if (e.target.innerText === "Arrows mode") {
+      if (e.target.innerText === "Arrows mode" || e.target.innerText === "Режим стрелочек") {
         arrowsModeOn = !arrowsModeOn;
         updateStatus();
       }
@@ -1281,14 +1285,14 @@ function EnterIsPressed() {
       ).firstChild.firstChild.innerText = "Текущий язык:";
       document.querySelector(
         ".keyboard__status-wrapper"
-      ).firstChild.lastChild.innerText = "Русский язык";
+      ).firstChild.lastChild.innerText = "Русский язык. Используйте shift+alt для смены языка.";
     } else {
       document.querySelector(
         ".keyboard__status-wrapper"
       ).firstChild.firstChild.innerText = "Current language:";
       document.querySelector(
         ".keyboard__status-wrapper"
-      ).firstChild.lastChild.innerText = " English Language";
+      ).firstChild.lastChild.innerText = " English Language. Use shift+alt to change language.";
     }
     if (arrowsModeOn === false) {
       if (keyboardLanguage === "Ru") {
@@ -1442,6 +1446,7 @@ function EnterIsPressed() {
   // }
 
   console.log(
+
     "P.S. Помните, JS не может включить/выключить капслок у вас на клавиатуре и переключение языка на виртуальной клавиатуре не поменяет ваш язык в системе (JS ещё такое не умеет)."
   );
 });
