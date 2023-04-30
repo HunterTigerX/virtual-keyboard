@@ -1051,7 +1051,8 @@ window.addEventListener("load", function () {
 
   document.addEventListener("click", (e) => {
     if (e.target.classList.contains("key__text")) {
-     // console.log('here')
+      console.log('here')
+      console.log(lastPosition)
       if (e.target.innerText === "Arrows mode") {
         arrowsModeOn = !arrowsModeOn;
         updateStatus();
@@ -1295,6 +1296,8 @@ window.addEventListener("load", function () {
   }
 
   function printCharacter(character) {
+    console.log('printCharacter', lastPosition);
+    console.log(lastPosition);
     if (lastPosition === 0) {
       //После выделения selectionStart возвращает 0. Проводим двойную проверку последнего положения курсора.
       lastPosition = document.querySelector(
@@ -1320,6 +1323,7 @@ window.addEventListener("load", function () {
     inputRow.value = `${leftHalf}${character}${rightHalf}`;
     lastPosition += 1;
     returnFocus();
+
   }
 
   document
@@ -1338,7 +1342,6 @@ window.addEventListener("load", function () {
       document.querySelector(".input__text-from-keyboard")
     ) {
       selectedText = window.getSelection().toString();
-      lastPosition = window.getSelection().focusOffset;
     }
   });
 
@@ -1346,7 +1349,15 @@ window.addEventListener("load", function () {
     changeStyleOnClick(event.target);
   });
 
+  window.addEventListener("mouseup", () => {
+    changeStyleOnClick2();
+  });
+
+  let changedElement;
+
   function changeStyleOnClick(event) {
+    changedElement = event;
+    console.log('cnageStyleOnClick', lastPosition);
     let targetedKeyClass = event.classList;
     let eventTarget = event;
 
@@ -1362,25 +1373,29 @@ window.addEventListener("load", function () {
       eventTarget.style.background = "green";
     } 
 
-
-
-    window.addEventListener("mouseup", function () {
-      if (
-        targetedKeyClass.contains("key__big") ||
-        targetedKeyClass.contains("key__small") || 
-      targetedKeyClass.contains("key__text")
-      ) {
-        eventTarget.parentNode.style.background = "none";
-      } else if (
-        targetedKeyClass.contains("key__text") ||
-        targetedKeyClass.contains("key")
-      ) {
-        eventTarget.style.background = "none";
-      }
-    });
   }
 
+  function changeStyleOnClick2() {
+    let targetedKeyClass = changedElement.classList;
+    let eventTarget = changedElement;
+    if (
+      targetedKeyClass.contains("key__big") ||
+      targetedKeyClass.contains("key__small") || 
+    targetedKeyClass.contains("key__text")
+    ) {
+      eventTarget.parentNode.style.background = "none";
+    } else if (
+      targetedKeyClass.contains("key__text") ||
+      targetedKeyClass.contains("key")
+    ) {
+      eventTarget.style.background = "none";
+    }
+  }
+
+
+
   function returnFocus() {
+    console.log('returnFocus', lastPosition);
     const input = document.querySelector(".input__text-from-keyboard");
     input.focus();
     input.setSelectionRange(lastPosition, lastPosition);
