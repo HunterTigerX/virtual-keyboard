@@ -52,9 +52,9 @@ window.addEventListener("load", function () {
   let isShiftPressed = false;
   let isCapslockPressed = false;
   let isAltPressed = false;
-  let arrowsModeOn = false;
+  let arrowsModeOn = true;
   let lastPosition = 0;
-  //let inputLength = 0;
+  //let git  = 0;
   let selectedText = false;
   let isArrowKeyPressed = false;
   let keyboardCapsWasPressed = false;
@@ -658,6 +658,7 @@ window.addEventListener("load", function () {
   }
 
   document.addEventListener("keydown", function (event) {
+    returnFocus();
     if (event.code !== "CapsLock") {
       document.querySelector(".key__" + event.code).style.background = "green";
     }
@@ -1454,8 +1455,9 @@ function EnterIsPressed() {
   //   document.querySelector(".key__ShiftRight").style.background = "none";
   // }
 
-  console.log(
-
-    "P.S. Помните, JS не может включить/выключить капслок у вас на клавиатуре и переключение языка на виртуальной клавиатуре не поменяет ваш язык в системе (JS ещё такое не умеет)."
-  );
+  console.log('Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6.');
+  console.log('Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на любой клавиатуре подсвечиваются обе клавиши с таким названием.');
+  console.log("Памятка 3. JS не может включить/выключить капслок у вас на физической клавиатуре, как и не может переключить на ней язык. Переключение языка и нажатие капслока на виртуальноя клавиатуре распространяется только на виртуальную клавиатуру");
+  console.log("p.s. Хотя практически можно попробовать обойти это, но к счастью по ТЗ нам это делать не надо")
+  console.log("Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелочек, но пока работают только стрелочки влево и вправо (на 01.05.2023)");
 });
