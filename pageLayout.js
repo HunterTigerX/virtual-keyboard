@@ -12,7 +12,11 @@ let isArrowKeyPressed = false;
 let keyboardCapsWasPressed = false;
 let keyboardShiftWasPressed = false;
 let keyboardAltWasPressed = false;
+let keyboardCtrlWasPressed = false;
+let keyboardWinWasPressed = false;
 let doNotChangeLang = false;
+let isCtrlPressed = false;
+let isWinPressed = false;
 
 if (localStorage.getItem("keyboardLanguage") === "undefined") {
   keyboardLanguage = "En";
@@ -419,6 +423,22 @@ function createKeyboard() {
     document.querySelector(`.key__AltRight`).style.background = "none";
   }
 
+  if (isCtrlPressed === true || keyboardCtrlWasPressed === true) {
+    document.querySelector(`.key__ControlLeft`).style.background = "green";
+    document.querySelector(`.key__ControlRight`).style.background = "green";
+  } else {
+    document.querySelector(`.key__ControlLeft`).style.background = "none";
+    document.querySelector(`.key__ControlRight`).style.background = "none";
+  }
+
+  if (isWinPressed === true || keyboardWinWasPressed === true) {
+    document.querySelector(`.key__MetaLeft`).style.background = "green";
+    document.querySelector(`.key__MetaRight`).style.background = "green";
+  } else {
+    document.querySelector(`.key__MetaLeft`).style.background = "none";
+    document.querySelector(`.key__MetaRight`).style.background = "none";
+  }
+
   const languageKey = document.querySelector(".key__ChangeLanguage");
 
   languageKey.addEventListener("click", function () {
@@ -661,6 +681,23 @@ function shiftIsPressed() {
 /* Шифты выше */
 
 /* Альты ниже */
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("key__text")) {
+    if (e.target.innerText === "Alt") {
+      returnFocus();
+      if (keyboardShiftWasPressed) {
+        //Былы зажат шифт на компьютере
+        altIsPressed();
+        document.querySelector(".key__AltLeft").style.background = "none";
+        document.querySelector(".key__AltRight").style.background = "none";
+      } else {
+        altIsPressed();
+      }
+    }
+  }
+});
+
 document.addEventListener("keydown", function (event) {
   if (event.code === "AltLeft" || event.code === "AltRight") {
     event.preventDefault();
@@ -685,26 +722,16 @@ document.addEventListener("keyup", function (event) {
   }
 });
 
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("key__text")) {
-    if (e.target.innerText === "Alt") {
-      returnFocus();
-      if (keyboardShiftWasPressed) {
-        //Былы зажат шифт на компьютере
-        altIsPressed();
-        document.querySelector(".key__AltLeft").style.background = "none";
-        document.querySelector(".key__AltRight").style.background = "none";
-      } else {
-        altIsPressed();
-      }
-    }
-  }
-});
-
 function altIsPressed() {
   isAltPressed = !isAltPressed;
-  document.querySelector(".key__AltLeft").style.background = "green";
-  document.querySelector(".key__AltRight").style.background = "green";
+  if (isAltPressed) {
+    document.querySelector(".key__AltLeft").style.background = "green";
+    document.querySelector(".key__AltRight").style.background = "green";
+  } else {
+    document.querySelector(".key__AltLeft").style.background = "none";
+    document.querySelector(".key__AltRight").style.background = "none";
+  }
+
   if (keyboardShiftWasPressed) {
     //Былы зажат шифт на компьютере
     changeLanguage(); //Поменяли язык при нажатии
@@ -719,13 +746,62 @@ function altIsPressed() {
       keyboardCapitalisation = false;
       changeLanguage();
     }
-    // else {
-    //   createKeyboard();
-    // }
   }
 }
 
 /* Альты выше */
+
+/* CTRL ниже */
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("key__text")) {
+    if (e.target.innerText === "Ctrl") {
+      returnFocus();
+      ctrlIsPressed();
+    }
+  }
+});
+
+function ctrlIsPressed() {
+  isCtrlPressed = !isCtrlPressed;
+  greenCtrl();
+}
+
+function greenCtrl() {
+  if (isCtrlPressed === true) {
+    document.querySelector(".key__ControlLeft").style.background = "green";
+    document.querySelector(".key__ControlRight").style.background = "green";
+  } else {
+    document.querySelector(".key__ControlLeft").style.background = "none";
+    document.querySelector(".key__ControlRight").style.background = "none";
+  }
+}
+/* CTRL выше */
+
+/* WIN ниже */
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("key__text")) {
+    if (e.target.innerText === "Win") {
+      returnFocus();
+      winPressed();
+    }
+  }
+});
+
+function winPressed() {
+  isWinPressed = !isWinPressed;
+  greenWin();
+}
+
+function greenWin() {
+  if (isWinPressed === true) {
+    document.querySelector(".key__MetaLeft").style.background = "green";
+    document.querySelector(".key__MetaRight").style.background = "green";
+  } else {
+    document.querySelector(".key__MetaLeft").style.background = "none";
+    document.querySelector(".key__MetaRight").style.background = "none";
+  }
+}
+/* WIN выше */
 
 /* Стелочки ниже */
 
@@ -890,7 +966,10 @@ document.addEventListener("click", (e) => {
 
   if (e.target.classList.contains("key")) {
     //Если была нажата буква или знак
-    printCharacter(e.target.firstChild.innerText);
+    if (!singleKeys.includes(e.target.firstChild.innerText)) {
+      printCharacter(e.target.firstChild.innerText);
+    }
+
     if (isShiftPressed && keyboardShiftWasPressed === false) {
       //Если нажат шифт
       shiftIsPressed();
@@ -1060,5 +1139,6 @@ function makeShiftsGreenAgain() {
 //   document.querySelector(".key__ShiftRight").style.background = "none";
 // }
 
-
-console.log("P.S. Помните, JS не может включить/выключить капслок у вас на клавиатуре и переключение языка на виртуальной клавиатуре не поменяет ваш язык в системе (JS ещё такое не умеет).")
+console.log(
+  "P.S. Помните, JS не может включить/выключить капслок у вас на клавиатуре и переключение языка на виртуальной клавиатуре не поменяет ваш язык в системе (JS ещё такое не умеет)."
+);
