@@ -713,6 +713,18 @@ window.addEventListener("load", function () {
   });
 
   document.addEventListener("keyup", function (event) {
+    const input = document.querySelector(".input__text-from-keyboard");
+    if (document.activeElement === input) {
+      console.log('aaaa')
+      selectedText = window.getSelection().toString();
+      if (selectedText === "") {
+        selectedText = false;
+      } else if (selectedText !== '') {
+        console.log('not empty')
+      }
+    }
+
+    console.log(selectedText.length, document.querySelector(".input__text-from-keyboard").value.length)
     if (event.code !== "CapsLock") {
       document.querySelector(".key__" + event.code).style.background = "none";
     }
@@ -756,15 +768,16 @@ window.addEventListener("load", function () {
 
     if (event.code === "Backspace") {
       keyboardBackSpaceWasPressed = false;
-      const input = document.querySelector(".input__text-from-keyboard");
       lastPosition = input.selectionStart;
     }
 
     if (event.code === "Delete") {
       keyboardDelWasPressed = false;
-      const input = document.querySelector(".input__text-from-keyboard");
       lastPosition = input.selectionStart;
     }
+
+
+
   });
 
   document.addEventListener("click", (e) => {
@@ -1011,45 +1024,71 @@ window.addEventListener("load", function () {
 
   function tabKeyIsPressed() {
     const input = document.querySelector(".input__text-from-keyboard");
-    let leftHalf = input.value.slice(0, lastPosition);
-    let rightHalf = input.value.slice(lastPosition, input.length);
-    input.value = `${leftHalf}${"\t"}${rightHalf}`;
+    if (input.value.length === selectedText.length) {
+      selectedText = false;
+      inputRow.value = `${"\t"}`;
+    } else {
+      let leftHalf = input.value.slice(0, lastPosition);
+      let rightHalf = input.value.slice(lastPosition, input.length);
+      input.value = `${leftHalf}${"\t"}${rightHalf}`;    
+    }
     lastPosition += 1;
     returnFocus();
   }
 
   function spaceKeyIsPressed() {
     const input = document.querySelector(".input__text-from-keyboard");
-    if (selectedText !== false) {
-      let leftHalf = input.value.slice(0, lastPosition);
-      let rightHalf = input.value.slice(
-        lastPosition + selectedText.length,
-        input.length
-      );
+    if (input.value.length === selectedText.length) {
       selectedText = false;
-      if (selectedText.length === input.value.length) {
-        inputRow.value = ` `;
-      } else {
-        inputRow.value = `${leftHalf}${" "}${rightHalf}`;
-      }
-
-      lastPosition += 1;
-      returnFocus();
+      inputRow.value = ` `;
     } else {
-      let leftHalf = input.value.slice(0, lastPosition);
-      let rightHalf = input.value.slice(lastPosition, input.length);
-      input.value = `${leftHalf}${" "}${rightHalf}`;
-      lastPosition += 1;
-      returnFocus();
+      if (selectedText !== false) {
+        let leftHalf = input.value.slice(0, lastPosition);
+        let rightHalf = input.value.slice(
+          lastPosition + selectedText.length,
+          input.length
+        );
+        selectedText = false;
+        if (selectedText.length === input.value.length) {
+          inputRow.value = ` `;
+        } else {
+          inputRow.value = `${leftHalf}${" "}${rightHalf}`;
+        }
+       } else {
+        let leftHalf = input.value.slice(0, lastPosition);
+        let rightHalf = input.value.slice(lastPosition, input.length);
+        input.value = `${leftHalf}${" "}${rightHalf}`;
+      }
     }
-   
+    lastPosition += 1;
+    returnFocus();
   }
 
   function EnterIsPressed() {
     const input = document.querySelector(".input__text-from-keyboard");
-    let leftHalf = input.value.slice(0, lastPosition);
-    let rightHalf = input.value.slice(lastPosition, input.length);
-    input.value = `${leftHalf}${"\r\n"}${rightHalf}`;
+    if (input.value.length === selectedText.length) {
+      selectedText = false;
+      inputRow.value = `${"\r\n"}`;
+    } else {
+      if (selectedText !== false) {
+        let leftHalf = input.value.slice(0, lastPosition);
+        let rightHalf = input.value.slice(
+          lastPosition + selectedText.length,
+          input.length
+        );
+        selectedText = false;
+        if (selectedText.length === input.value.length) { //Если был выделен весь текст
+          inputRow.value = `${"\r\n"}`;
+        } else {
+          inputRow.value = `${leftHalf}${"\r\n"}${rightHalf}`;
+        }
+      } else {
+        let leftHalf = input.value.slice(0, lastPosition);
+        let rightHalf = input.value.slice(lastPosition, input.length);
+        input.value = `${leftHalf}${"\r\n"}${rightHalf}`;
+      }
+    }
+
     lastPosition += 1;
     returnFocus();
   }
@@ -1137,35 +1176,42 @@ window.addEventListener("load", function () {
     const input = document.querySelector(".input__text-from-keyboard");
     let leftHalf, rightHalf;
     isBackSpaceHold = true;
-
-    if (keyboardBackSpaceWasPressed === false) {
-      if (selectedText !== false) {
-        //Если был выделен текст
-        leftHalf = input.value.slice(0, lastPosition);
-        rightHalf = input.value.slice(
-          lastPosition + selectedText.length,
-          input.length
-        );
-        selectedText = false;
-        inputRow.value = `${leftHalf}${rightHalf}`;
-        returnFocus();
-      } else {
-        if (lastPosition !== 0) {
-          let leftHalf = input.value.slice(0, lastPosition - 1);
-          let rightHalf = input.value.slice(lastPosition, input.length);
-          if (lastPosition === 1 && input.value.length === 1) {
-            input.value = ``;
-          } else {
-            input.value = `${leftHalf}${rightHalf}`;
-          }
-
-          if (lastPosition > 0) {
-            lastPosition -= 1;
-          }
+    if (input.value.length === selectedText.length) {
+      selectedText = false;
+      inputRow.value = ``;
+      returnFocus();
+    } else {
+      if (keyboardBackSpaceWasPressed === false) {
+        if (selectedText !== false) {
+          //Если был выделен текст
+          leftHalf = input.value.slice(0, lastPosition);
+          rightHalf = input.value.slice(
+            lastPosition + selectedText.length,
+            input.length
+          );
+          selectedText = false;
+          inputRow.value = `${leftHalf}${rightHalf}`;
           returnFocus();
+        } else {
+          if (lastPosition !== 0) {
+            let leftHalf = input.value.slice(0, lastPosition - 1);
+            let rightHalf = input.value.slice(lastPosition, input.length);
+            if (lastPosition === 1 && input.value.length === 1) {
+              input.value = ``;
+            } else {
+              input.value = `${leftHalf}${rightHalf}`;
+            }
+  
+            if (lastPosition > 0) {
+              lastPosition -= 1;
+            }
+            returnFocus();
+          }
         }
       }
     }
+
+
   }
 
   function runDelNTimes() {
@@ -1177,27 +1223,35 @@ window.addEventListener("load", function () {
     let leftHalf, rightHalf;
     isDelHold = true;
 
-    if (selectedText !== false) {
-      leftHalf = input.value.slice(0, lastPosition);
-      rightHalf = input.value.slice(
-        lastPosition + selectedText.length,
-        input.length
-      );
+    if (input.value.length === selectedText.length) {
       selectedText = false;
-      inputRow.value = `${leftHalf}${rightHalf}`;
+      inputRow.value = ``;
       returnFocus();
-    } else {
-      if (keyboardDelWasPressed !== true) {
-        let leftHalf = input.value.slice(0, lastPosition);
-        let rightHalf = input.value.slice(lastPosition + 1, input.length);
-        if (lastPosition === 0 && input.value.length === 1) {
-          input.value = ``;
-        } else {
-          input.value = `${leftHalf}${rightHalf}`;
-        }
+    }  else {
+      if (selectedText !== false) {
+        leftHalf = input.value.slice(0, lastPosition);
+        rightHalf = input.value.slice(
+          lastPosition + selectedText.length,
+          input.length
+        );
+        selectedText = false;
+        inputRow.value = `${leftHalf}${rightHalf}`;
         returnFocus();
+      } else {
+        if (keyboardDelWasPressed !== true) {
+          let leftHalf = input.value.slice(0, lastPosition);
+          let rightHalf = input.value.slice(lastPosition + 1, input.length);
+          if (lastPosition === 0 && input.value.length === 1) {
+            input.value = ``;
+          } else {
+            input.value = `${leftHalf}${rightHalf}`;
+          }
+          returnFocus();
+        }
       }
     }
+
+
   }
 
   function checkIfEmulateKeysWerePressed() {
@@ -1273,19 +1327,24 @@ window.addEventListener("load", function () {
 
     let leftHalf, rightHalf;
 
-    if (selectedText !== false) {
-      //Если был выделен текст
-      leftHalf = input.value.slice(0, lastPosition);
-      rightHalf = input.value.slice(
-        lastPosition + selectedText.length,
-        input.length
-      );
+    if (input.value.length === selectedText.length) {
       selectedText = false;
+      inputRow.value = `${character}`;
     } else {
-      leftHalf = input.value.slice(0, lastPosition);
-      rightHalf = input.value.slice(lastPosition, input.value.length);
+      if (selectedText !== false) {
+        //Если был выделен текст
+        leftHalf = input.value.slice(0, lastPosition);
+        rightHalf = input.value.slice(
+          lastPosition + selectedText.length,
+          input.length
+        );
+        selectedText = false;
+      } else {
+        leftHalf = input.value.slice(0, lastPosition);
+        rightHalf = input.value.slice(lastPosition, input.value.length);
+      }
+      inputRow.value = `${leftHalf}${character}${rightHalf}`;
     }
-    inputRow.value = `${leftHalf}${character}${rightHalf}`;
     lastPosition += 1;
     returnFocus();
   }
@@ -1333,6 +1392,7 @@ window.addEventListener("load", function () {
     document.querySelector(".key__ShiftLeft").style.background = "green";
     document.querySelector(".key__ShiftRight").style.background = "green";
   }
+
 
   // console.log(
   //   "Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6."
