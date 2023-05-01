@@ -54,7 +54,6 @@ window.addEventListener("load", function () {
   let isAltPressed = false;
   let arrowsModeOn = true;
   let lastPosition = 0;
-  //let git  = 0;
   let selectedText = false;
   let isArrowKeyPressed = false;
   let keyboardCapsWasPressed = false;
@@ -531,36 +530,52 @@ window.addEventListener("load", function () {
     if (isShiftPressed === true || keyboardShiftWasPressed === true) {
       makeShiftsGreenAgain();
     } else {
-      document.querySelector(".key__ShiftLeft").style.background = "rgb(250, 238, 238)";
-      document.querySelector(".key__ShiftRight").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__ShiftLeft").style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(".key__ShiftRight").style.background =
+        "rgb(250, 238, 238)";
     }
     if (isCapslockPressed === true || keyboardCapsWasPressed === true) {
-      document.querySelector(`.key__CapsLock`).style.background = "rgb(243, 178, 178)";
+      document.querySelector(`.key__CapsLock`).style.background =
+        "rgb(243, 178, 178)";
     } else {
-      document.querySelector(`.key__CapsLock`).style.background = "rgb(250, 238, 238)";
+      document.querySelector(`.key__CapsLock`).style.background =
+        "rgb(250, 238, 238)";
     }
     if (isAltPressed === true || keyboardAltWasPressed === true) {
-      document.querySelector(`.key__AltLeft`).style.background = "rgb(243, 178, 178)";
-      document.querySelector(`.key__AltRight`).style.background = "rgb(243, 178, 178)";
+      document.querySelector(`.key__AltLeft`).style.background =
+        "rgb(243, 178, 178)";
+      document.querySelector(`.key__AltRight`).style.background =
+        "rgb(243, 178, 178)";
     } else {
-      document.querySelector(`.key__AltLeft`).style.background = "rgb(250, 238, 238)";
-      document.querySelector(`.key__AltRight`).style.background = "rgb(250, 238, 238)";
+      document.querySelector(`.key__AltLeft`).style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(`.key__AltRight`).style.background =
+        "rgb(250, 238, 238)";
     }
 
     if (isCtrlPressed === true || keyboardCtrlWasPressed === true) {
-      document.querySelector(`.key__ControlLeft`).style.background = "rgb(243, 178, 178)";
-      document.querySelector(`.key__ControlRight`).style.background = "rgb(243, 178, 178)";
+      document.querySelector(`.key__ControlLeft`).style.background =
+        "rgb(243, 178, 178)";
+      document.querySelector(`.key__ControlRight`).style.background =
+        "rgb(243, 178, 178)";
     } else {
-      document.querySelector(`.key__ControlLeft`).style.background = "rgb(250, 238, 238)";
-      document.querySelector(`.key__ControlRight`).style.background = "rgb(250, 238, 238)";
+      document.querySelector(`.key__ControlLeft`).style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(`.key__ControlRight`).style.background =
+        "rgb(250, 238, 238)";
     }
 
     if (isWinPressed === true || keyboardWinWasPressed === true) {
-      document.querySelector(`.key__MetaLeft`).style.background = "rgb(243, 178, 178)";
-      document.querySelector(`.key__MetaRight`).style.background = "rgb(243, 178, 178)";
+      document.querySelector(`.key__MetaLeft`).style.background =
+        "rgb(243, 178, 178)";
+      document.querySelector(`.key__MetaRight`).style.background =
+        "rgb(243, 178, 178)";
     } else {
-      document.querySelector(`.key__MetaLeft`).style.background = "rgb(250, 238, 238)";
-      document.querySelector(`.key__MetaRight`).style.background = "rgb(250, 238, 238)";
+      document.querySelector(`.key__MetaLeft`).style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(`.key__MetaRight`).style.background =
+        "rgb(250, 238, 238)";
     }
 
     if (keyboardLanguage === "Ru") {
@@ -651,7 +666,8 @@ window.addEventListener("load", function () {
 
   document.addEventListener("keydown", function (event) {
     if (event.code !== "CapsLock") {
-      document.querySelector(".key__" + event.code).style.background = "rgb(243, 178, 178)";
+      document.querySelector(".key__" + event.code).style.background =
+        "rgb(243, 178, 178)";
     }
     checkIfEmulateKeysWerePressed();
 
@@ -661,6 +677,13 @@ window.addEventListener("load", function () {
         capsLockIsPressed();
       }
       keyboardCapsWasPressed = true;
+      return;
+    }
+    if (event.code === "ControlLeft" || event.code === "ControlRight") {
+      if (keyboardCtrlWasPressed === false) {
+        ctrlIsPressed();
+      }
+      keyboardCtrlWasPressed = true;
       return;
     }
 
@@ -700,13 +723,11 @@ window.addEventListener("load", function () {
     }
 
     if (event.code === "Backspace") {
-      console.log("Нажали на клавиатуре");
       keyboardBackSpaceWasPressed = true;
       backSpaceIsPressed();
     }
 
     if (event.code === "Del") {
-      console.log("Нажали на клавиатуре");
       keyboardDelWasPressed = true;
       DelIsPressed();
     }
@@ -715,25 +736,25 @@ window.addEventListener("load", function () {
   document.addEventListener("keyup", function (event) {
     const input = document.querySelector(".input__text-from-keyboard");
     if (document.activeElement === input) {
-      console.log("aaaa");
       selectedText = window.getSelection().toString();
       if (selectedText === "") {
         selectedText = false;
-      } else if (selectedText !== "") {
-        console.log("not empty");
       }
     }
 
-    console.log(
-      selectedText.length,
-      document.querySelector(".input__text-from-keyboard").value.length
-    );
     if (event.code !== "CapsLock") {
-      document.querySelector(".key__" + event.code).style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__" + event.code).style.background =
+        "rgb(250, 238, 238)";
     }
 
     if (event.code === "CapsLock") {
       keyboardCapsWasPressed = false;
+    }
+
+    if (event.code === "ControlLeft" || event.code === "ControlRight") {
+      keyboardCtrlWasPressed = false;
+      isCtrlPressed = false;
+      greenCtrl();
     }
 
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
@@ -763,8 +784,10 @@ window.addEventListener("load", function () {
       } else {
         altIsPressed();
       }
-      document.querySelector(".key__AltLeft").style.background = "rgb(250, 238, 238)";
-      document.querySelector(".key__AltRight").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__AltLeft").style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(".key__AltRight").style.background =
+        "rgb(250, 238, 238)";
       keyboardAltWasPressed = false;
       isAltPressed = false;
     }
@@ -819,15 +842,18 @@ window.addEventListener("load", function () {
         if (keyboardShiftWasPressed) {
           //Былы зажат шифт на компьютере
           altIsPressed();
-          document.querySelector(".key__AltLeft").style.background = "rgb(250, 238, 238)";
-          document.querySelector(".key__AltRight").style.background = "rgb(250, 238, 238)";
+          document.querySelector(".key__AltLeft").style.background =
+            "rgb(250, 238, 238)";
+          document.querySelector(".key__AltRight").style.background =
+            "rgb(250, 238, 238)";
         } else {
           altIsPressed();
         }
       }
       if (e.target.innerText === "Ctrl") {
-        returnFocus();
-        // ctrlIsPressed();
+        if (!keyboardCtrlWasPressed) {
+          ctrlIsPressed();
+        }
       }
 
       if (e.target.innerText === "Win") {
@@ -1114,11 +1140,15 @@ window.addEventListener("load", function () {
   function altIsPressed() {
     isAltPressed = !isAltPressed;
     if (isAltPressed) {
-      document.querySelector(".key__AltLeft").style.background = "rgb(243, 178, 178)";
-      document.querySelector(".key__AltRight").style.background = "rgb(243, 178, 178)";
+      document.querySelector(".key__AltLeft").style.background =
+        "rgb(243, 178, 178)";
+      document.querySelector(".key__AltRight").style.background =
+        "rgb(243, 178, 178)";
     } else {
-      document.querySelector(".key__AltLeft").style.background = "rgb(250, 238, 238)";
-      document.querySelector(".key__AltRight").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__AltLeft").style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(".key__AltRight").style.background =
+        "rgb(250, 238, 238)";
     }
 
     if (keyboardShiftWasPressed) {
@@ -1138,20 +1168,44 @@ window.addEventListener("load", function () {
     }
   }
 
-  // function ctrlIsPressed() {
-  //   isCtrlPressed = !isCtrlPressed;
-  //   greenCtrl();
-  // }
+  function ctrlIsPressed() {
+    const input = document.querySelector(".input__text-from-keyboard");
+    if (!keyboardCtrlWasPressed) {
+      isCtrlPressed = !isCtrlPressed;
+    }
+    input.focus();
+    if (selectedText !== false) {
+      if (isCtrlPressed) {
+        input.setSelectionRange(
+          lastPosition,
+          lastPosition + selectedText.length
+        );
+      } else {
+        input.setSelectionRange(
+          lastPosition + selectedText.length,
+          lastPosition + selectedText.length
+        );
+      }
+    }
+    greenCtrl();
+    if (!isCtrlPressed) {
+      selectedText = false;
+    }
+  }
 
-  // function greenCtrl() {
-  //   if (isCtrlPressed === true) {
-  //     document.querySelector(".key__ControlLeft").style.background = "rgb(243, 178, 178)";
-  //     document.querySelector(".key__ControlRight").style.background = "rgb(243, 178, 178)";
-  //   } else {
-  //     document.querySelector(".key__ControlLeft").style.background = "rgb(250, 238, 238)";
-  //     document.querySelector(".key__ControlRight").style.background = "rgb(250, 238, 238)";
-  //   }
-  // }
+  function greenCtrl() {
+    if (isCtrlPressed === true) {
+      document.querySelector(".key__ControlLeft").style.background =
+        "rgb(243, 178, 178)";
+      document.querySelector(".key__ControlRight").style.background =
+        "rgb(243, 178, 178)";
+    } else {
+      document.querySelector(".key__ControlLeft").style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(".key__ControlRight").style.background =
+        "rgb(250, 238, 238)";
+    }
+  }
 
   function winPressed() {
     isWinPressed = !isWinPressed;
@@ -1160,11 +1214,15 @@ window.addEventListener("load", function () {
 
   function greenWin() {
     if (isWinPressed === true) {
-      document.querySelector(".key__MetaLeft").style.background = "rgb(243, 178, 178)";
-      document.querySelector(".key__MetaRight").style.background = "rgb(243, 178, 178)";
+      document.querySelector(".key__MetaLeft").style.background =
+        "rgb(243, 178, 178)";
+      document.querySelector(".key__MetaRight").style.background =
+        "rgb(243, 178, 178)";
     } else {
-      document.querySelector(".key__MetaLeft").style.background = "rgb(250, 238, 238)";
-      document.querySelector(".key__MetaRight").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__MetaLeft").style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(".key__MetaRight").style.background =
+        "rgb(250, 238, 238)";
     }
   }
 
@@ -1173,7 +1231,6 @@ window.addEventListener("load", function () {
   }
 
   function backSpaceIsPressed() {
-    console.log(selectedText);
     const input = document.querySelector(".input__text-from-keyboard");
     let leftHalf, rightHalf;
     isBackSpaceHold = true;
@@ -1252,10 +1309,14 @@ window.addEventListener("load", function () {
 
   function checkIfEmulateKeysWerePressed() {
     if (isArrowKeyPressed === true) {
-      document.querySelector(".key__ArrowDown").style.background = "rgb(250, 238, 238)";
-      document.querySelector(".key__ArrowUp").style.background = "rgb(250, 238, 238)";
-      document.querySelector(".key__ArrowLeft").style.background = "rgb(250, 238, 238)";
-      document.querySelector(".key__ArrowRight").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__ArrowDown").style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(".key__ArrowUp").style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(".key__ArrowLeft").style.background =
+        "rgb(250, 238, 238)";
+      document.querySelector(".key__ArrowRight").style.background =
+        "rgb(250, 238, 238)";
       isArrowKeyPressed = false;
     }
   }
@@ -1314,6 +1375,27 @@ window.addEventListener("load", function () {
   }
 
   function printCharacter(character) {
+    let copyChar =
+      character === "с" ||
+      character === "С" ||
+      character === "c" ||
+      character === "C";
+    let pasteChar =
+      character === "м" ||
+      character === "М" ||
+      character === "v" ||
+      character === "V";
+    let selectChar =
+      character === "a" ||
+      character === "A" ||
+      character === "ф" ||
+      character === "Ф";
+    let cutChar =
+      character === "x" ||
+      character === "X" ||
+      character === "Ч" ||
+      character === "ч";
+    let ctrlStatement = isCtrlPressed || keyboardCtrlWasPressed;
     const input = document.querySelector(".input__text-from-keyboard");
 
     if (lastPosition === 0) {
@@ -1323,26 +1405,99 @@ window.addEventListener("load", function () {
 
     let leftHalf, rightHalf;
 
-    if (input.value.length === selectedText.length) {
-      selectedText = false;
-      inputRow.value = `${character}`;
-    } else {
-      if (selectedText !== false) {
-        //Если был выделен текст
-        leftHalf = input.value.slice(0, lastPosition);
-        rightHalf = input.value.slice(
-          lastPosition + selectedText.length,
-          input.length
-        );
-        selectedText = false;
-      } else {
-        leftHalf = input.value.slice(0, lastPosition);
-        rightHalf = input.value.slice(lastPosition, input.value.length);
+    if (ctrlStatement && (copyChar || pasteChar || selectChar || cutChar)) {
+      if (ctrlStatement && copyChar) {
+        //Копируем выделенный текст
+        localStorage.setItem("ctrlStorage", selectedText);
+        if (isCtrlPressed) {
+          ctrlIsPressed();
+          selectedText = false;
+          isCtrlPressed = false;
+          lastPosition += localStorage.getItem("ctrlStorage").length;
+          returnFocus();
+        }
+      } else if (ctrlStatement && pasteChar) {
+        if (localStorage.getItem("ctrlStorage") !== undefined) {
+          if (selectedText !== false) {
+            if (input.value.length === selectedText.length) {
+              selectedText = false;
+              inputRow.value = `${localStorage.getItem("ctrlStorage")}`;
+            } else {
+              leftHalf = input.value.slice(0, lastPosition);
+              rightHalf = input.value.slice(
+                lastPosition + selectedText.length,
+                input.length
+              );
+              selectedText = false;
+              inputRow.value = `${leftHalf}${localStorage.getItem(
+                "ctrlStorage"
+              )}${rightHalf}`;
+            }
+          } else {
+            leftHalf = input.value.slice(0, lastPosition);
+            rightHalf = input.value.slice(lastPosition, input.value.length);
+            inputRow.value = `${leftHalf}${localStorage.getItem(
+              "ctrlStorage"
+            )}${rightHalf}`;
+          }
+          if (!keyboardCtrlWasPressed) {
+            ctrlIsPressed();
+            isCtrlPressed = false;
+          }
+          lastPosition += localStorage.getItem("ctrlStorage").length;
+          returnFocus();
+        }
+      } else if (ctrlStatement && selectChar) {
+        input.focus();
+        input.setSelectionRange(0, input.value.length);
+        selectedText = window.getSelection().toString();
+      } else if (ctrlStatement && cutChar) {
+        //Копируем выделенный текст
+        localStorage.setItem("ctrlStorage", selectedText);
+        if (isCtrlPressed) {
+          if (selectedText !== false) {
+            //ctrlIsPressed();
+            if (input.value.length === selectedText.length) {
+              inputRow.value = ``;
+            } else {
+              let leftHalf = input.value.slice(0, lastPosition);
+              let rightHalf = input.value.slice(
+                lastPosition + selectedText.length,
+                input.length
+              );
+              input.value = `${leftHalf}${rightHalf}`;
+            }
+            selectedText = false;
+            isCtrlPressed = false;
+            greenCtrl();
+            returnFocus();
+          }
+        }
       }
-      inputRow.value = `${leftHalf}${character}${rightHalf}`;
+    } else {
+      if (input.value.length === selectedText.length) {
+        selectedText = false;
+        inputRow.value = `${character}`;
+      } else {
+        if (selectedText !== false) {
+          //Если был выделен текст
+
+          //Сюда добавить ctrl+c ctrl+x ctrl+v
+          leftHalf = input.value.slice(0, lastPosition);
+          rightHalf = input.value.slice(
+            lastPosition + selectedText.length,
+            input.length
+          );
+          selectedText = false;
+        } else {
+          leftHalf = input.value.slice(0, lastPosition);
+          rightHalf = input.value.slice(lastPosition, input.value.length);
+        }
+        inputRow.value = `${leftHalf}${character}${rightHalf}`;
+      }
+      lastPosition += 1;
+      returnFocus();
     }
-    lastPosition += 1;
-    returnFocus();
   }
 
   function changeStyleOnClick(event) {
@@ -1385,23 +1540,28 @@ window.addEventListener("load", function () {
   }
 
   function makeShiftsGreenAgain() {
-    document.querySelector(".key__ShiftLeft").style.background = "rgb(243, 178, 178)";
-    document.querySelector(".key__ShiftRight").style.background = "rgb(243, 178, 178)";
+    document.querySelector(".key__ShiftLeft").style.background =
+      "rgb(243, 178, 178)";
+    document.querySelector(".key__ShiftRight").style.background =
+      "rgb(243, 178, 178)";
   }
 
-  // console.log(
-  //   "Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6."
-  // );
-  // console.log(
-  //   "Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на любой клавиатуре подсвечиваются обе клавиши с таким названием."
-  // );
-  // console.log(
-  //   "Памятка 3. JS не может включить/выключить капслок у вас на физической клавиатуре, как и не может переключить на ней язык. Переключение языка и нажатие капслока на виртуальноя клавиатуре распространяется только на виртуальную клавиатуру"
-  // );
-  // console.log(
-  //   "p.s. Хотя практически можно попробовать обойти это, но к счастью по ТЗ нам это делать не надо"
-  // );
-  // console.log(
-  //   "Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелок, но пока работают только стрелочки влево и вправо (на 01.05.2023)"
-  // );
+  console.log(
+    "Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6."
+  );
+  console.log(
+    "Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на любой клавиатуре подсвечиваются обе клавиши с таким названием."
+  );
+  console.log(
+    "Памятка 3. JS не может включить/выключить капслок у вас на физической клавиатуре, как и не может переключить на ней язык. Переключение языка и нажатие капслока на виртуальноя клавиатуре распространяется только на виртуальную клавиатуру"
+  );
+  console.log(
+    "p.s. Хотя практически можно попробовать обойти это, но к счастью по ТЗ нам это делать не надо"
+  );
+  console.log(
+    "Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелок, но пока работают только стрелочки влево и вправо (на 01.05.2023)"
+  );
+  console.log(
+    "Памятка 5. Добавлены Ctrl+C Ctrl+V Ctrl+X Ctrl+A. Помните, буфер обмена в моей клавиатуре отличается от того, который хранит ctrl+v на физической клавиатуре"
+  );
 });
