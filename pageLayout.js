@@ -665,6 +665,8 @@ window.addEventListener("load", function () {
   createKeyboard();
 
   document.addEventListener("keydown", function (event) {
+    const input = document.querySelector(".input__text-from-keyboard");
+    input.focus();
     if (event.code !== "CapsLock") {
       document.querySelector(".key__" + event.code).style.background =
         "rgb(243, 178, 178)";
