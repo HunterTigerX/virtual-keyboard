@@ -650,7 +650,6 @@ window.addEventListener("load", function () {
   createKeyboard();
 
   document.addEventListener("keydown", function (event) {
-    returnFocus();
     if (event.code !== "CapsLock") {
       document.querySelector(".key__" + event.code).style.background = "green";
     }
@@ -695,11 +694,13 @@ window.addEventListener("load", function () {
     }
 
     if (event.code === "Backspace") {
+      console.log("Нажали на клавиатуре");
       keyboardBackSpaceWasPressed = true;
       backSpaceIsPressed();
     }
 
     if (event.code === "Del") {
+      console.log("Нажали на клавиатуре");
       keyboardDelWasPressed = true;
       DelIsPressed();
     }
@@ -761,44 +762,34 @@ window.addEventListener("load", function () {
   });
 
   document.addEventListener("click", (e) => {
+    const input = document.querySelector(".input__text-from-keyboard");
     if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "CapsLock") {
         //Если нажат Капслок
         returnFocus();
         capsLockIsPressed();
       }
-    }
 
-    if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Lang" || e.target.innerText === "Язык") {
         changeLanguage();
         returnFocus();
       }
-    }
 
-    if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Tab") {
         tabKeyIsPressed();
         //Если нажат Шифт
       }
-    }
 
-    if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Enter") {
         EnterIsPressed();
         //Если нажат Шифт
       }
-    }
-
-    if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Shift") {
         returnFocus();
         shiftIsPressed();
         //Если нажат Шифт
       }
-    }
 
-    if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Alt") {
         returnFocus();
         if (keyboardShiftWasPressed) {
@@ -810,61 +801,16 @@ window.addEventListener("load", function () {
           altIsPressed();
         }
       }
-    }
-
-    if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Ctrl") {
         returnFocus();
-        ctrlIsPressed();
+       // ctrlIsPressed();
       }
-    }
 
-    if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Win") {
         returnFocus();
         winPressed();
       }
-    }
 
-    //console.log(e)
-    if (
-      document.activeElement ===
-      document.querySelector(".input__text-from-keyboard")
-    ) {
-      //Сохранить фокус
-      lastPosition = document.querySelector(
-        ".input__text-from-keyboard"
-      ).selectionStart;
-    }
-
-    //Вернуть фокус на поле ввода при нажатии на клавишу
-
-    if (e.target.classList.contains("key")) {
-      //Если была нажата буква или знак
-      if (!singleKeys.includes(e.target.firstChild.innerText)) {
-        printCharacter(e.target.firstChild.innerText);
-      }
-
-      if (isShiftPressed && keyboardShiftWasPressed === false) {
-        //Если нажат шифт
-        shiftIsPressed();
-      }
-    } else {
-      if (
-        e.target.classList.contains("key__big") || //Елси мы нажали на вложенный элемент
-        e.target.classList.contains("key__small")
-      ) {
-        printCharacter(e.target.parentNode.firstChild.innerText);
-        if (isShiftPressed && keyboardShiftWasPressed === false) {
-          //Если нажат шифт на виртуальной клавиатуре
-          shiftIsPressed();
-        }
-      }
-    }
-
-    if (e.target.classList.contains("key__text")) {
-      console.log("here");
-      console.log(lastPosition);
       if (
         e.target.innerText === "Arrows mode" ||
         e.target.innerText === "Режим стрелочек"
@@ -902,24 +848,7 @@ window.addEventListener("load", function () {
       if (e.target.innerText === "Down") {
         isArrowKeyPressed = true;
         if (!arrowsModeOn) {
-          // const input = document.querySelector('.input__text-from-keyboard');
-          // input.focus();
-          // input.setSelectionRange(lastPosition, lastPosition);
-          // console.log(window.getSelection().toString())
-          // console.log(input.getSelection().toString())
-          // let simulateKey = new KeyboardEvent("keydown", {
-          //   key: "ArrowDown",
-          //   keyCode: 40,
-          //   which: 40,
-          //   code: "ArrowDown",
-          //   location: 0,
-          //   altKey: false,
-          //   ctrlKey: false,
-          //   metaKey: false,
-          //   shiftKey: false,
-          //   repeat: false,
-          // });
-          // document.dispatchEvent(simulateKey);
+          return;
         } else {
           printCharacter(`↓`);
         }
@@ -954,26 +883,41 @@ window.addEventListener("load", function () {
       if (e.target.innerText === "Up") {
         isArrowKeyPressed = true;
         if (!arrowsModeOn) {
-          // let simulateKey = new KeyboardEvent("keydown", {
-          //   key: "ArrowUp",
-          //   keyCode: 38,
-          //   which: 38,
-          //   code: "ArrowUp",
-          //   location: 0,
-          //   altKey: false,
-          //   ctrlKey: false,
-          //   metaKey: false,
-          //   shiftKey: false,
-          //   repeat: false,
-          // });
-          //  input.focus();
-          //  console.log(simulateKey)
-          //  document.dispatchEvent(simulateKey);
-          //input.dispatchEvent(simulateKey2);
+          return;
         } else {
           printCharacter(`↑`);
         }
       }
+    }
+
+    if (e.target.classList.contains("key")) {
+
+      //Если была нажата буква или знак
+      if (!singleKeys.includes(e.target.firstChild.innerText)) {
+
+        printCharacter(e.target.firstChild.innerText);
+      }
+        //Если нажат шифт
+      if (isShiftPressed && keyboardShiftWasPressed === false) {
+        shiftIsPressed();
+      }
+    } else {
+
+      if (
+        e.target.classList.contains("key__big") || //Елси мы нажали на вложенный элемент
+        e.target.classList.contains("key__small")
+      ) {
+        printCharacter(e.target.parentNode.firstChild.innerText);
+        if (isShiftPressed && keyboardShiftWasPressed === false) {
+          //Если нажат шифт на виртуальной клавиатуре
+          shiftIsPressed();
+        }
+      }
+    }
+
+    if (document.activeElement === input) {
+      //Сохранить фокус
+      lastPosition = input.selectionStart;
     }
   });
 
@@ -983,16 +927,11 @@ window.addEventListener("load", function () {
         isBackSpaceClicked = true;
         runBSNTimes();
       }
-    }
-
-    if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Del") {
         isDelClicked = true;
         runDelNTimes();
       }
-    }
 
-    if (e.target.classList.contains("key__text")) {
       if (
         e.target.innerText === "Left" ||
         e.target.innerText === "Right" ||
@@ -1007,6 +946,12 @@ window.addEventListener("load", function () {
   });
 
   document.addEventListener("mouseup", function () {
+    const input = document.querySelector(".input__text-from-keyboard");
+    // if () {
+    //   lastPosition = document.querySelector(
+    //     ".input__text-from-keyboard"
+    //   ).selectionStart;
+    // }
     clearInterval(runBS);
     clearInterval(runDel);
     if (isBackSpaceHold === false && isBackSpaceClicked === true) {
@@ -1022,10 +967,12 @@ window.addEventListener("load", function () {
     isDelHold = false;
 
     if (
-      document.activeElement ===
-      document.querySelector(".input__text-from-keyboard")
+      document.activeElement === input
     ) {
       selectedText = window.getSelection().toString();
+      if (selectedText === '') {
+        selectedText = false;
+      }
     }
 
     changeStyleOnClick2();
@@ -1033,13 +980,9 @@ window.addEventListener("load", function () {
 
   let inputRow = document.querySelector(".input__text-from-keyboard");
 
-  document
-    .querySelector(".input__text-from-keyboard")
-    .addEventListener("input", function () {
+  inputRow.addEventListener("input", function () {
       //При вводе текста с клавиатуры обновляем значения
-      lastPosition = document.querySelector(
-        ".input__text-from-keyboard"
-      ).selectionStart;
+      lastPosition = inputRow.selectionStart;
       //inputLength = document.querySelector(".input__text-from-keyboard").value.length;
     });
 
@@ -1122,20 +1065,20 @@ window.addEventListener("load", function () {
     }
   }
 
-  function ctrlIsPressed() {
-    isCtrlPressed = !isCtrlPressed;
-    greenCtrl();
-  }
+  // function ctrlIsPressed() {
+  //   isCtrlPressed = !isCtrlPressed;
+  //   greenCtrl();
+  // }
 
-  function greenCtrl() {
-    if (isCtrlPressed === true) {
-      document.querySelector(".key__ControlLeft").style.background = "green";
-      document.querySelector(".key__ControlRight").style.background = "green";
-    } else {
-      document.querySelector(".key__ControlLeft").style.background = "none";
-      document.querySelector(".key__ControlRight").style.background = "none";
-    }
-  }
+  // function greenCtrl() {
+  //   if (isCtrlPressed === true) {
+  //     document.querySelector(".key__ControlLeft").style.background = "green";
+  //     document.querySelector(".key__ControlRight").style.background = "green";
+  //   } else {
+  //     document.querySelector(".key__ControlLeft").style.background = "none";
+  //     document.querySelector(".key__ControlRight").style.background = "none";
+  //   }
+  // }
 
   function winPressed() {
     isWinPressed = !isWinPressed;
@@ -1157,16 +1100,39 @@ window.addEventListener("load", function () {
   }
 
   function backSpaceIsPressed() {
-    isBackSpaceHold = true;
+    console.log(selectedText);
     const input = document.querySelector(".input__text-from-keyboard");
-    if (keyboardBackSpaceWasPressed !== true) {
-      let leftHalf = input.value.slice(0, lastPosition - 1);
-      let rightHalf = input.value.slice(lastPosition, input.length);
-      input.value = `${leftHalf}${rightHalf}`;
-      if (lastPosition > 0) {
-        lastPosition -= 1;
-      }
+    let leftHalf, rightHalf;
+    isBackSpaceHold = true;
+
+     if (selectedText !== false) {
+      //Если был выделен текст
+      leftHalf = input.value.slice(0, lastPosition);
+      rightHalf = input.value.slice(
+        lastPosition + selectedText.length,
+        input.length
+      );
+      selectedText = false;
+      inputRow.value = `${leftHalf}${rightHalf}`;
       returnFocus();
+    } else {
+
+    if (keyboardBackSpaceWasPressed === false) {
+      if (lastPosition !== 0) {
+        let leftHalf = input.value.slice(0, lastPosition - 1);
+        let rightHalf = input.value.slice(lastPosition, input.length);
+        if (lastPosition === 1 && input.value.length === 1) {
+          input.value = ``;
+        } else {
+          input.value = `${leftHalf}${rightHalf}`;
+        }
+  
+        if (lastPosition > 0) {
+          lastPosition -= 1;
+        } 
+        returnFocus();
+      }
+    } 
     }
   }
 
@@ -1175,13 +1141,31 @@ window.addEventListener("load", function () {
   }
 
   function DelIsPressed() {
-    isDelHold = true;
     const input = document.querySelector(".input__text-from-keyboard");
-    if (keyboardDelWasPressed !== true) {
-      let leftHalf = input.value.slice(0, lastPosition);
-      let rightHalf = input.value.slice(lastPosition + 1, input.length);
-      input.value = `${leftHalf}${rightHalf}`;
+    let leftHalf, rightHalf;
+    isDelHold = true;
+
+    if (selectedText !== false) {
+      leftHalf = input.value.slice(0, lastPosition);
+      rightHalf = input.value.slice(
+        lastPosition + selectedText.length,
+        input.length
+      );
+      selectedText = false;
+      inputRow.value = `${leftHalf}${rightHalf}`;
       returnFocus();
+    } else {
+
+      if (keyboardDelWasPressed !== true) {
+        let leftHalf = input.value.slice(0, lastPosition);
+        let rightHalf = input.value.slice(lastPosition + 1, input.length);
+        if (lastPosition === 0 && input.value.length === 1) {
+          input.value = ``;
+        } else {
+          input.value = `${leftHalf}${rightHalf}`;
+        }
+        returnFocus();
+      }
     }
   }
 
@@ -1249,16 +1233,13 @@ window.addEventListener("load", function () {
   }
 
   function printCharacter(character) {
-    console.log("printCharacter", lastPosition);
-    console.log(lastPosition);
+    const input = document.querySelector(".input__text-from-keyboard");
+
     if (lastPosition === 0) {
       //После выделения selectionStart возвращает 0. Проводим двойную проверку последнего положения курсора.
-      lastPosition = document.querySelector(
-        ".input__text-from-keyboard"
-      ).selectionStart;
+      lastPosition = input.selectionStart;
     }
 
-    const input = document.querySelector(".input__text-from-keyboard");
     let leftHalf, rightHalf;
 
     if (selectedText !== false) {
@@ -1280,7 +1261,6 @@ window.addEventListener("load", function () {
 
   function changeStyleOnClick(event) {
     changedElement = event;
-    console.log("cnageStyleOnClick", lastPosition);
     let targetedKeyClass = event.classList;
     let eventTarget = event;
 
@@ -1313,7 +1293,6 @@ window.addEventListener("load", function () {
   }
 
   function returnFocus() {
-    console.log("returnFocus", lastPosition);
     const input = document.querySelector(".input__text-from-keyboard");
     input.focus();
     input.setSelectionRange(lastPosition, lastPosition);
@@ -1324,19 +1303,19 @@ window.addEventListener("load", function () {
     document.querySelector(".key__ShiftRight").style.background = "green";
   }
 
-  console.log(
-    "Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6."
-  );
-  console.log(
-    "Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на любой клавиатуре подсвечиваются обе клавиши с таким названием."
-  );
-  console.log(
-    "Памятка 3. JS не может включить/выключить капслок у вас на физической клавиатуре, как и не может переключить на ней язык. Переключение языка и нажатие капслока на виртуальноя клавиатуре распространяется только на виртуальную клавиатуру"
-  );
-  console.log(
-    "p.s. Хотя практически можно попробовать обойти это, но к счастью по ТЗ нам это делать не надо"
-  );
-  console.log(
-    "Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелочек, но пока работают только стрелочки влево и вправо (на 01.05.2023)"
-  );
+  // console.log(
+  //   "Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6."
+  // );
+  // console.log(
+  //   "Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на любой клавиатуре подсвечиваются обе клавиши с таким названием."
+  // );
+  // console.log(
+  //   "Памятка 3. JS не может включить/выключить капслок у вас на физической клавиатуре, как и не может переключить на ней язык. Переключение языка и нажатие капслока на виртуальноя клавиатуре распространяется только на виртуальную клавиатуру"
+  // );
+  // console.log(
+  //   "p.s. Хотя практически можно попробовать обойти это, но к счастью по ТЗ нам это делать не надо"
+  // );
+  // console.log(
+  //   "Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелочек, но пока работают только стрелочки влево и вправо (на 01.05.2023)"
+  // );
 });
