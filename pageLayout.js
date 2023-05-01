@@ -1164,7 +1164,11 @@ window.addEventListener("load", function () {
         //Был нажат шифт на вирт. клавиатуре
         isAltPressed = false;
         isShiftPressed = false;
-        keyboardCapitalisation = false;
+        if (isCapslockPressed) {
+          keyboardCapitalisation = !keyboardCapitalisation
+        } else {
+          keyboardCapitalisation = false;
+        }
         changeLanguage();
       }
     }
