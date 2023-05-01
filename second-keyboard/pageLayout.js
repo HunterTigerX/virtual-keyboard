@@ -74,10 +74,10 @@ window.addEventListener("load", function () {
   let runDel;
   let runBS;
 
-  if (localStorage.getItem("keyboardLanguage") !== "undefined") {
-    keyboardLanguage = localStorage.getItem("keyboardLanguage");
+  if (localStorage.getItem("keyboardLanguage") !== "En") {
+    keyboardLanguage = 'Ru';
   } 
-  
+
   const specialSymbols = [
     //Клавиши с особыми размерами клавиш
     "BackSpace",

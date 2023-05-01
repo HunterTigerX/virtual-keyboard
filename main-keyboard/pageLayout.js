@@ -419,8 +419,8 @@ const ruSmall = [
   ],
 ];
 
-if (localStorage.getItem("keyboardLanguage") !== "undefined") {
-  keyboardLanguage = localStorage.getItem("keyboardLanguage");
+if (localStorage.getItem("keyboardLanguage") !== "En") {
+  keyboardLanguage = 'Ru';
 } 
 
 function createPageLayout() {
