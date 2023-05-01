@@ -71,6 +71,9 @@ window.addEventListener("load", function () {
   let isDelClicked = false;
   let isDelHold = false;
   let keyboardDelWasPressed = false;
+  let changedElement;
+  let runDel;
+  let runBS;
 
   if (localStorage.getItem("keyboardLanguage") === "undefined") {
     keyboardLanguage = "En";
@@ -509,7 +512,12 @@ window.addEventListener("load", function () {
     keyboardOS.classList.add("div__os-block");
 
     keyboardStatus.append(keyboardStatusLanguage, keyboardStatusArrows);
-    document.body.append(inputWrapper, keyboardStatus, keyboardOS, keyboardWrapper); //Вставляем клавиатуру в документ
+    document.body.append(
+      inputWrapper,
+      keyboardStatus,
+      keyboardOS,
+      keyboardWrapper
+    ); //Вставляем клавиатуру в документ
   }
 
   function createKeyboard() {
@@ -555,17 +563,12 @@ window.addEventListener("load", function () {
       document.querySelector(`.key__MetaRight`).style.background = "none";
     }
 
-    const languageKey = document.querySelector(".key__ChangeLanguage");
-
-    languageKey.addEventListener("click", function () {
-      changeLanguage();
-      returnFocus();
-    });
-
-    if (keyboardLanguage === 'Ru') {
-      document.querySelector('.div__os-block').innerText = 'Клавиатура была создана под/для ОС Виндоус'
+    if (keyboardLanguage === "Ru") {
+      document.querySelector(".div__os-block").innerText =
+        "Клавиатура была создана под/для ОС Виндоус";
     } else {
-      document.querySelector('.div__os-block').innerText = 'The keyboard was created in and for Windows OS'
+      document.querySelector(".div__os-block").innerText =
+        "The keyboard was created in and for Windows OS";
     }
 
     updateStatus();
@@ -646,28 +649,13 @@ window.addEventListener("load", function () {
   createKeyboardWrapper();
   createKeyboard();
 
-  function changeLanguage() {
-    if (keyboardLanguage === "Ru") {
-      keyboardLanguage = "En";
-      localStorage.setItem("keyboardLanguage", "En");
-    } else {
-      keyboardLanguage = "Ru";
-      localStorage.setItem("keyboardLanguage", "Ru");
-    }
-    createKeyboard();
-  }
-
   document.addEventListener("keydown", function (event) {
     returnFocus();
     if (event.code !== "CapsLock") {
       document.querySelector(".key__" + event.code).style.background = "green";
     }
     checkIfEmulateKeysWerePressed();
-  });
 
-  /* Капслок ниже*/
-
-  document.addEventListener("keydown", function (event) {
     if (event.code === "CapsLock") {
       event.preventDefault();
       if (keyboardCapsWasPressed === false) {
@@ -676,99 +664,17 @@ window.addEventListener("load", function () {
       keyboardCapsWasPressed = true;
       return;
     }
-  });
 
-  document.addEventListener("keyup", function (event) {
-    if (event.code !== "CapsLock") {
-      document.querySelector(".key__" + event.code).style.background = "none";
-    }
-  });
-
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("key__text")) {
-      if (e.target.innerText === "CapsLock") {
-        //Если нажат Капслок
-        returnFocus();
-        capsLockIsPressed();
-      }
-    }
-  });
-
-  function capsLockIsPressed() {
-    isCapslockPressed = !isCapslockPressed;
-    keyboardCapitalisation = !keyboardCapitalisation;
-    createKeyboard(); //Меняем раскладку
-  }
-
-  document.addEventListener("keyup", function (event) {
-    if (event.code === "CapsLock") {
-      keyboardCapsWasPressed = false;
-    }
-  });
-  /* Капслок выше*/
-
-  /* Таб ниже */
-
-  document.addEventListener("keydown", function (event) {
     if (event.code === "Tab") {
       tabKeyIsPressed();
       event.preventDefault();
       return;
     }
-  });
 
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("key__text")) {
-      if (e.target.innerText === "Tab") {
-        tabKeyIsPressed();
-        //Если нажат Шифт
-      }
+    if (event.code === "Enter") {
+      lastPosition += 1;
     }
-  });
 
-  function tabKeyIsPressed() {
-    const input = document.querySelector(".input__text-from-keyboard");
-    let leftHalf = input.value.slice(0, lastPosition);
-    let rightHalf = input.value.slice(lastPosition, input.length);
-    input.value = `${leftHalf}${"\t"}${rightHalf}`;
-    lastPosition += 1;
-    returnFocus();
-  }
-
-  /* Таб выше */
-
-/* Enter ниже */
-document.addEventListener("keydown", function (event) {
-  if (event.code === "Enter") {
-    lastPosition += 1;
-  }
-});
-
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("key__text")) {
-    if (e.target.innerText === "Enter") {
-      EnterIsPressed();
-      //Если нажат Шифт
-    }
-  }
-});
-
-function EnterIsPressed() {
-  const input = document.querySelector(".input__text-from-keyboard");
-  let leftHalf = input.value.slice(0, lastPosition);
-  let rightHalf = input.value.slice(lastPosition, input.length);
-  input.value = `${leftHalf}${"\r\n"}${rightHalf}`;
-  lastPosition += 1;
-  returnFocus();
-}
-
-
-/* Enter выше */
-
-
-
-  /* Шифты ниже */
-  document.addEventListener("keydown", function (event) {
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
       if (isShiftPressed === false) {
         //Если мы не нажимали на шифт на вирт клаве
@@ -779,9 +685,35 @@ function EnterIsPressed() {
       }
       keyboardShiftWasPressed = true;
     }
+
+    if (event.code === "AltLeft" || event.code === "AltRight") {
+      event.preventDefault();
+      if (keyboardAltWasPressed === false) {
+        altIsPressed();
+      }
+      keyboardAltWasPressed = true;
+    }
+
+    if (event.code === "Backspace") {
+      keyboardBackSpaceWasPressed = true;
+      backSpaceIsPressed();
+    }
+
+    if (event.code === "Del") {
+      keyboardDelWasPressed = true;
+      DelIsPressed();
+    }
   });
 
   document.addEventListener("keyup", function (event) {
+    if (event.code !== "CapsLock") {
+      document.querySelector(".key__" + event.code).style.background = "none";
+    }
+
+    if (event.code === "CapsLock") {
+      keyboardCapsWasPressed = false;
+    }
+
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
       if (doNotChangeLang === true) {
         /* Если не менялся язык */
@@ -802,9 +734,62 @@ function EnterIsPressed() {
       }
       createKeyboard();
     }
+
+    if (event.code === "AltLeft" || event.code === "AltRight") {
+      if (doNotChangeLang === true) {
+        doNotChangeLang = false;
+      } else {
+        altIsPressed();
+      }
+      document.querySelector(".key__AltLeft").style.background = "none";
+      document.querySelector(".key__AltRight").style.background = "none";
+      keyboardAltWasPressed = false;
+      isAltPressed = false;
+    }
+
+    if (event.code === "Backspace") {
+      keyboardBackSpaceWasPressed = false;
+      const input = document.querySelector(".input__text-from-keyboard");
+      lastPosition = input.selectionStart;
+    }
+
+    if (event.code === "Delete") {
+      keyboardDelWasPressed = false;
+      const input = document.querySelector(".input__text-from-keyboard");
+      lastPosition = input.selectionStart;
+    }
   });
 
   document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("key__text")) {
+      if (e.target.innerText === "CapsLock") {
+        //Если нажат Капслок
+        returnFocus();
+        capsLockIsPressed();
+      }
+    }
+
+    if (e.target.classList.contains("key__text")) {
+      if (e.target.innerText === "Lang" || e.target.innerText === "Язык") {
+        changeLanguage();
+        returnFocus();
+      }
+    }
+
+    if (e.target.classList.contains("key__text")) {
+      if (e.target.innerText === "Tab") {
+        tabKeyIsPressed();
+        //Если нажат Шифт
+      }
+    }
+
+    if (e.target.classList.contains("key__text")) {
+      if (e.target.innerText === "Enter") {
+        EnterIsPressed();
+        //Если нажат Шифт
+      }
+    }
+
     if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Shift") {
         returnFocus();
@@ -812,30 +797,7 @@ function EnterIsPressed() {
         //Если нажат Шифт
       }
     }
-  });
 
-  function shiftIsPressed() {
-    if (keyboardAltWasPressed) {
-      //Если был нажат альт на клавиатуре
-      changeLanguage();
-      doNotChangeLang = true;
-    } else if (isAltPressed === true) {
-      isShiftPressed = false;
-      isAltPressed = false;
-      changeLanguage();
-    } else {
-      //Альт не был нажат
-      keyboardCapitalisation = !keyboardCapitalisation;
-      isShiftPressed = !isShiftPressed;
-      createKeyboard(); //Меняем раскладку
-    }
-  }
-
-  /* Шифты выше */
-
-  /* Альты ниже */
-
-  document.addEventListener("click", (e) => {
     if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Alt") {
         returnFocus();
@@ -849,408 +811,21 @@ function EnterIsPressed() {
         }
       }
     }
-  });
 
-  document.addEventListener("keydown", function (event) {
-    if (event.code === "AltLeft" || event.code === "AltRight") {
-      event.preventDefault();
-      if (keyboardAltWasPressed === false) {
-        altIsPressed();
-      }
-      keyboardAltWasPressed = true;
-    }
-  });
-
-  document.addEventListener("keyup", function (event) {
-    if (event.code === "AltLeft" || event.code === "AltRight") {
-      if (doNotChangeLang === true) {
-        doNotChangeLang = false;
-      } else {
-        altIsPressed();
-      }
-      document.querySelector(".key__AltLeft").style.background = "none";
-      document.querySelector(".key__AltRight").style.background = "none";
-      keyboardAltWasPressed = false;
-      isAltPressed = false;
-    }
-  });
-
-  function altIsPressed() {
-    isAltPressed = !isAltPressed;
-    if (isAltPressed) {
-      document.querySelector(".key__AltLeft").style.background = "green";
-      document.querySelector(".key__AltRight").style.background = "green";
-    } else {
-      document.querySelector(".key__AltLeft").style.background = "none";
-      document.querySelector(".key__AltRight").style.background = "none";
-    }
-
-    if (keyboardShiftWasPressed) {
-      //Былы зажат шифт на компьютере
-      changeLanguage(); //Поменяли язык при нажатии
-      isAltPressed = false;
-      isShiftPressed = false;
-      doNotChangeLang = true;
-    } else {
-      if (isShiftPressed === true) {
-        //Был нажат шифт на вирт. клавиатуре
-        isAltPressed = false;
-        isShiftPressed = false;
-        keyboardCapitalisation = false;
-        changeLanguage();
-      }
-    }
-  }
-
-  /* Альты выше */
-
-  /* CTRL ниже */
-  document.addEventListener("click", (e) => {
     if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Ctrl") {
         returnFocus();
         ctrlIsPressed();
       }
     }
-  });
 
-  function ctrlIsPressed() {
-    isCtrlPressed = !isCtrlPressed;
-    greenCtrl();
-  }
-
-  function greenCtrl() {
-    if (isCtrlPressed === true) {
-      document.querySelector(".key__ControlLeft").style.background = "green";
-      document.querySelector(".key__ControlRight").style.background = "green";
-    } else {
-      document.querySelector(".key__ControlLeft").style.background = "none";
-      document.querySelector(".key__ControlRight").style.background = "none";
-    }
-  }
-  /* CTRL выше */
-
-  /* WIN ниже */
-  document.addEventListener("click", (e) => {
     if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "Win") {
         returnFocus();
         winPressed();
       }
     }
-  });
 
-  function winPressed() {
-    isWinPressed = !isWinPressed;
-    greenWin();
-  }
-
-  function greenWin() {
-    if (isWinPressed === true) {
-      document.querySelector(".key__MetaLeft").style.background = "green";
-      document.querySelector(".key__MetaRight").style.background = "green";
-    } else {
-      document.querySelector(".key__MetaLeft").style.background = "none";
-      document.querySelector(".key__MetaRight").style.background = "none";
-    }
-  }
-    /* WIN выше */
-
-    /* BackSpace ниже */
-
-    document.addEventListener("keydown", function (event) {
-      if (event.code === "Backspace") {
-        keyboardBackSpaceWasPressed = true;
-        backSpaceIsPressed();
-      }
-    });
-  
-    document.addEventListener("keyup", function (event) {
-      if (event.code === "Backspace") {
-        keyboardBackSpaceWasPressed = false;
-        const input = document.querySelector(".input__text-from-keyboard");
-        lastPosition = input.selectionStart;
-      }
-    });
-
-    document.addEventListener("click", () => {
-      // if (e.target.classList.contains("key__text")) {
-      //   console.log(e.target.innerText)
-      //   if (e.target.innerText === "BackSpace") {
-      //     runBSNTimes();
-      //    // console.log(lastPosition)
-      //   //  backSpaceIsPressed();
-      //   }
-      // }
-    });
-
-    document.addEventListener('mousedown', function(e) {
-      if (e.target.classList.contains("key__text")) {
-        if (e.target.innerText === "BackSpace") {
-          isBackSpaceClicked = true;
-          runBSNTimes();
-        }
-      }
-    })
-
-    let runBS;
-
-    function runBSNTimes() {
-      runBS = setInterval(backSpaceIsPressed, 100);
-    }
-  
-    document.addEventListener('mouseup', function() {
-      clearInterval(runBS);
-      if (isBackSpaceHold === false && isBackSpaceClicked === true) {
-        backSpaceIsPressed();
-      }
-      isBackSpaceClicked = false;
-      isBackSpaceHold = false;
-    })
-  
-
-    function backSpaceIsPressed() {
-      isBackSpaceHold = true;
-      const input = document.querySelector(".input__text-from-keyboard");
-      if (keyboardBackSpaceWasPressed !== true) {  
-
-          let leftHalf = input.value.slice(0, lastPosition - 1);
-          let rightHalf = input.value.slice(lastPosition, input.length);
-          input.value = `${leftHalf}${rightHalf}`;
-          if (lastPosition > 0) {lastPosition -= 1;}
-          returnFocus();
-      }
-    }
-
-    /* BackSpace выше */
-
-        /* Del ниже */
-
-        document.addEventListener("keydown", function (event) {
-          if (event.code === "Del") {
-            keyboardDelWasPressed = true;
-            DelIsPressed();
-          }
-        });
-      
-        document.addEventListener("keyup", function (event) {
-          if (event.code === "Delete") {
-            keyboardDelWasPressed = false;
-            const input = document.querySelector(".input__text-from-keyboard");
-            lastPosition = input.selectionStart;
-          }
-        });
-    
-        document.addEventListener("click", () => {
-          // if (e.target.classList.contains("key__text")) {
-          //   console.log(e.target.innerText)
-          //   if (e.target.innerText === "Del") {
-          //     runBSNTimes();
-          //    // console.log(lastPosition)
-          //   //  DelIsPressed();
-          //   }
-          // }
-        });
-    
-        document.addEventListener('mousedown', function(e) {
-          if (e.target.classList.contains("key__text")) {
-            if (e.target.innerText === "Del") {
-              isDelClicked = true;
-              runDelNTimes();
-            }
-          }
-        })
-    
-        let runDel;
-    
-        function runDelNTimes() {
-          runDel = setInterval(DelIsPressed, 100);
-        }
-      
-        document.addEventListener('mouseup', function() {
-          clearInterval(runDel);
-          if (isDelHold === false && isDelClicked === true) {
-            DelIsPressed();
-          }
-          isDelClicked = false;
-          isDelHold = false;
-        })
-      
-    
-        function DelIsPressed() {
-          isDelHold = true;
-          const input = document.querySelector(".input__text-from-keyboard");
-          if (keyboardDelWasPressed !== true) {  
-    
-              let leftHalf = input.value.slice(0, lastPosition);
-              let rightHalf = input.value.slice(lastPosition + 1, input.length);
-              input.value = `${leftHalf}${rightHalf}`;
-              returnFocus();
-          }
-        }
-    
-        /* Del выше */
-
-  /* Стелочки ниже */
-
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("key__text")) {
-      console.log('here')
-      console.log(lastPosition)
-      if (e.target.innerText === "Arrows mode" || e.target.innerText === "Режим стрелочек") {
-        arrowsModeOn = !arrowsModeOn;
-        updateStatus();
-      }
-
-
-      if (e.target.innerText === "Left") {
-        isArrowKeyPressed = true;
-        if (!arrowsModeOn) {
-          if (lastPosition > 0) {
-            lastPosition -= 1;
-          }
-          returnFocus();
-
-          let simulateKey = new KeyboardEvent("keydown", {
-            key: "ArrowLeft",
-            keyCode: 37,
-            which: 37,
-            code: "ArrowLeft",
-            location: 0,
-            altKey: false,
-            ctrlKey: false,
-            metaKey: false,
-            shiftKey: false,
-            repeat: false,
-          });
-          document.dispatchEvent(simulateKey);
-        } else {
-          printCharacter(`←`);
-        }
-      }
-
-
-      if (e.target.innerText === "Down") {
-        isArrowKeyPressed = true;
-        if (!arrowsModeOn) {
-          // const input = document.querySelector('.input__text-from-keyboard');
-          // input.focus();
-          // input.setSelectionRange(lastPosition, lastPosition);
-          // console.log(window.getSelection().toString())
-          // console.log(input.getSelection().toString())
-          // let simulateKey = new KeyboardEvent("keydown", {
-          //   key: "ArrowDown",
-          //   keyCode: 40,
-          //   which: 40,
-          //   code: "ArrowDown",
-          //   location: 0,
-          //   altKey: false,
-          //   ctrlKey: false,
-          //   metaKey: false,
-          //   shiftKey: false,
-          //   repeat: false,
-          // });
-          // document.dispatchEvent(simulateKey);
-        } else {
-          printCharacter(`↓`);
-        }
-      }
-
-
-      if (e.target.innerText === "Right") {
-        isArrowKeyPressed = true;
-        if (!arrowsModeOn) {
-          if (lastPosition >= 0) {
-            lastPosition += 1;
-          }
-          returnFocus();
-          let simulateKey = new KeyboardEvent("keydown", {
-            key: "ArrowRight",
-            keyCode: 39,
-            which: 39,
-            code: "ArrowRight",
-            location: 0,
-            altKey: false,
-            ctrlKey: false,
-            metaKey: false,
-            shiftKey: false,
-            repeat: false,
-          });
-
-          document.dispatchEvent(simulateKey);
-        } else {
-          printCharacter(`→`);
-        }
-      }
-
-
-      if (e.target.innerText === "Up") {
-        isArrowKeyPressed = true;
-        if (!arrowsModeOn) {
-          // let simulateKey = new KeyboardEvent("keydown", {
-          //   key: "ArrowUp",
-          //   keyCode: 38,
-          //   which: 38,
-          //   code: "ArrowUp",
-          //   location: 0,
-          //   altKey: false,
-          //   ctrlKey: false,
-          //   metaKey: false,
-          //   shiftKey: false,
-          //   repeat: false,
-          // });
-          //  input.focus();
-          //  console.log(simulateKey)
-          //  document.dispatchEvent(simulateKey);
-          //input.dispatchEvent(simulateKey2);
-        } else {
-          printCharacter(`↑`);
-        }
-      }
-
-
-    }
-  });
-
-  function checkIfEmulateKeysWerePressed() {
-    if (isArrowKeyPressed === true) {
-      document.querySelector(".key__ArrowDown").style.background = "none";
-      document.querySelector(".key__ArrowUp").style.background = "none";
-      document.querySelector(".key__ArrowLeft").style.background = "none";
-      document.querySelector(".key__ArrowRight").style.background = "none";
-      isArrowKeyPressed = false;
-    }
-  }
-
-  document
-    .querySelector(".key__ArrowDown")
-    .addEventListener("mousedown", (event) => {
-      event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
-    });
-
-  document
-    .querySelector(".key__ArrowUp")
-    .addEventListener("mousedown", (event) => {
-      event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
-    });
-
-  document
-    .querySelector(".key__ArrowLeft")
-    .addEventListener("mousedown", (event) => {
-      event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
-    });
-
-  document
-    .querySelector(".key__ArrowRight")
-    .addEventListener("mousedown", (event) => {
-      event.preventDefault(); // prevent textarea to loose focus when buttons are clicked
-    });
-
-  /* Стрелочки выше */
-
-  let inputRow = document.querySelector(".input__text-from-keyboard");
-
-  document.addEventListener("click", (e) => {
     //console.log(e)
     if (
       document.activeElement ===
@@ -1286,7 +861,339 @@ function EnterIsPressed() {
         }
       }
     }
+
+    if (e.target.classList.contains("key__text")) {
+      console.log("here");
+      console.log(lastPosition);
+      if (
+        e.target.innerText === "Arrows mode" ||
+        e.target.innerText === "Режим стрелочек"
+      ) {
+        arrowsModeOn = !arrowsModeOn;
+        updateStatus();
+      }
+
+      if (e.target.innerText === "Left") {
+        isArrowKeyPressed = true;
+        if (!arrowsModeOn) {
+          if (lastPosition > 0) {
+            lastPosition -= 1;
+          }
+          returnFocus();
+
+          let simulateKey = new KeyboardEvent("keydown", {
+            key: "ArrowLeft",
+            keyCode: 37,
+            which: 37,
+            code: "ArrowLeft",
+            location: 0,
+            altKey: false,
+            ctrlKey: false,
+            metaKey: false,
+            shiftKey: false,
+            repeat: false,
+          });
+          document.dispatchEvent(simulateKey);
+        } else {
+          printCharacter(`←`);
+        }
+      }
+
+      if (e.target.innerText === "Down") {
+        isArrowKeyPressed = true;
+        if (!arrowsModeOn) {
+          // const input = document.querySelector('.input__text-from-keyboard');
+          // input.focus();
+          // input.setSelectionRange(lastPosition, lastPosition);
+          // console.log(window.getSelection().toString())
+          // console.log(input.getSelection().toString())
+          // let simulateKey = new KeyboardEvent("keydown", {
+          //   key: "ArrowDown",
+          //   keyCode: 40,
+          //   which: 40,
+          //   code: "ArrowDown",
+          //   location: 0,
+          //   altKey: false,
+          //   ctrlKey: false,
+          //   metaKey: false,
+          //   shiftKey: false,
+          //   repeat: false,
+          // });
+          // document.dispatchEvent(simulateKey);
+        } else {
+          printCharacter(`↓`);
+        }
+      }
+
+      if (e.target.innerText === "Right") {
+        isArrowKeyPressed = true;
+        if (!arrowsModeOn) {
+          if (lastPosition >= 0) {
+            lastPosition += 1;
+          }
+          returnFocus();
+          let simulateKey = new KeyboardEvent("keydown", {
+            key: "ArrowRight",
+            keyCode: 39,
+            which: 39,
+            code: "ArrowRight",
+            location: 0,
+            altKey: false,
+            ctrlKey: false,
+            metaKey: false,
+            shiftKey: false,
+            repeat: false,
+          });
+
+          document.dispatchEvent(simulateKey);
+        } else {
+          printCharacter(`→`);
+        }
+      }
+
+      if (e.target.innerText === "Up") {
+        isArrowKeyPressed = true;
+        if (!arrowsModeOn) {
+          // let simulateKey = new KeyboardEvent("keydown", {
+          //   key: "ArrowUp",
+          //   keyCode: 38,
+          //   which: 38,
+          //   code: "ArrowUp",
+          //   location: 0,
+          //   altKey: false,
+          //   ctrlKey: false,
+          //   metaKey: false,
+          //   shiftKey: false,
+          //   repeat: false,
+          // });
+          //  input.focus();
+          //  console.log(simulateKey)
+          //  document.dispatchEvent(simulateKey);
+          //input.dispatchEvent(simulateKey2);
+        } else {
+          printCharacter(`↑`);
+        }
+      }
+    }
   });
+
+  document.addEventListener("mousedown", function (e) {
+    if (e.target.classList.contains("key__text")) {
+      if (e.target.innerText === "BackSpace") {
+        isBackSpaceClicked = true;
+        runBSNTimes();
+      }
+    }
+
+    if (e.target.classList.contains("key__text")) {
+      if (e.target.innerText === "Del") {
+        isDelClicked = true;
+        runDelNTimes();
+      }
+    }
+
+    if (e.target.classList.contains("key__text")) {
+      if (
+        e.target.innerText === "Left" ||
+        e.target.innerText === "Right" ||
+        e.target.innerText === "Down" ||
+        e.target.innerText === "Up"
+      ) {
+        event.preventDefault();
+      }
+    }
+
+    changeStyleOnClick(e.target);
+  });
+
+  document.addEventListener("mouseup", function () {
+    clearInterval(runBS);
+    clearInterval(runDel);
+    if (isBackSpaceHold === false && isBackSpaceClicked === true) {
+      backSpaceIsPressed();
+    }
+    isBackSpaceClicked = false;
+    isBackSpaceHold = false;
+
+    if (isDelHold === false && isDelClicked === true) {
+      DelIsPressed();
+    }
+    isDelClicked = false;
+    isDelHold = false;
+
+    if (
+      document.activeElement ===
+      document.querySelector(".input__text-from-keyboard")
+    ) {
+      selectedText = window.getSelection().toString();
+    }
+
+    changeStyleOnClick2();
+  });
+
+  let inputRow = document.querySelector(".input__text-from-keyboard");
+
+  document
+    .querySelector(".input__text-from-keyboard")
+    .addEventListener("input", function () {
+      //При вводе текста с клавиатуры обновляем значения
+      lastPosition = document.querySelector(
+        ".input__text-from-keyboard"
+      ).selectionStart;
+      //inputLength = document.querySelector(".input__text-from-keyboard").value.length;
+    });
+
+  function changeLanguage() {
+    if (keyboardLanguage === "Ru") {
+      keyboardLanguage = "En";
+      localStorage.setItem("keyboardLanguage", "En");
+    } else {
+      keyboardLanguage = "Ru";
+      localStorage.setItem("keyboardLanguage", "Ru");
+    }
+    createKeyboard();
+  }
+
+  function capsLockIsPressed() {
+    isCapslockPressed = !isCapslockPressed;
+    keyboardCapitalisation = !keyboardCapitalisation;
+    createKeyboard(); //Меняем раскладку
+  }
+
+  function tabKeyIsPressed() {
+    const input = document.querySelector(".input__text-from-keyboard");
+    let leftHalf = input.value.slice(0, lastPosition);
+    let rightHalf = input.value.slice(lastPosition, input.length);
+    input.value = `${leftHalf}${"\t"}${rightHalf}`;
+    lastPosition += 1;
+    returnFocus();
+  }
+
+  function EnterIsPressed() {
+    const input = document.querySelector(".input__text-from-keyboard");
+    let leftHalf = input.value.slice(0, lastPosition);
+    let rightHalf = input.value.slice(lastPosition, input.length);
+    input.value = `${leftHalf}${"\r\n"}${rightHalf}`;
+    lastPosition += 1;
+    returnFocus();
+  }
+
+  function shiftIsPressed() {
+    if (keyboardAltWasPressed) {
+      //Если был нажат альт на клавиатуре
+      changeLanguage();
+      doNotChangeLang = true;
+    } else if (isAltPressed === true) {
+      isShiftPressed = false;
+      isAltPressed = false;
+      changeLanguage();
+    } else {
+      //Альт не был нажат
+      keyboardCapitalisation = !keyboardCapitalisation;
+      isShiftPressed = !isShiftPressed;
+      createKeyboard(); //Меняем раскладку
+    }
+  }
+
+  function altIsPressed() {
+    isAltPressed = !isAltPressed;
+    if (isAltPressed) {
+      document.querySelector(".key__AltLeft").style.background = "green";
+      document.querySelector(".key__AltRight").style.background = "green";
+    } else {
+      document.querySelector(".key__AltLeft").style.background = "none";
+      document.querySelector(".key__AltRight").style.background = "none";
+    }
+
+    if (keyboardShiftWasPressed) {
+      //Былы зажат шифт на компьютере
+      changeLanguage(); //Поменяли язык при нажатии
+      isAltPressed = false;
+      isShiftPressed = false;
+      doNotChangeLang = true;
+    } else {
+      if (isShiftPressed === true) {
+        //Был нажат шифт на вирт. клавиатуре
+        isAltPressed = false;
+        isShiftPressed = false;
+        keyboardCapitalisation = false;
+        changeLanguage();
+      }
+    }
+  }
+
+  function ctrlIsPressed() {
+    isCtrlPressed = !isCtrlPressed;
+    greenCtrl();
+  }
+
+  function greenCtrl() {
+    if (isCtrlPressed === true) {
+      document.querySelector(".key__ControlLeft").style.background = "green";
+      document.querySelector(".key__ControlRight").style.background = "green";
+    } else {
+      document.querySelector(".key__ControlLeft").style.background = "none";
+      document.querySelector(".key__ControlRight").style.background = "none";
+    }
+  }
+
+  function winPressed() {
+    isWinPressed = !isWinPressed;
+    greenWin();
+  }
+
+  function greenWin() {
+    if (isWinPressed === true) {
+      document.querySelector(".key__MetaLeft").style.background = "green";
+      document.querySelector(".key__MetaRight").style.background = "green";
+    } else {
+      document.querySelector(".key__MetaLeft").style.background = "none";
+      document.querySelector(".key__MetaRight").style.background = "none";
+    }
+  }
+
+  function runBSNTimes() {
+    runBS = setInterval(backSpaceIsPressed, 100);
+  }
+
+  function backSpaceIsPressed() {
+    isBackSpaceHold = true;
+    const input = document.querySelector(".input__text-from-keyboard");
+    if (keyboardBackSpaceWasPressed !== true) {
+      let leftHalf = input.value.slice(0, lastPosition - 1);
+      let rightHalf = input.value.slice(lastPosition, input.length);
+      input.value = `${leftHalf}${rightHalf}`;
+      if (lastPosition > 0) {
+        lastPosition -= 1;
+      }
+      returnFocus();
+    }
+  }
+
+  function runDelNTimes() {
+    runDel = setInterval(DelIsPressed, 100);
+  }
+
+  function DelIsPressed() {
+    isDelHold = true;
+    const input = document.querySelector(".input__text-from-keyboard");
+    if (keyboardDelWasPressed !== true) {
+      let leftHalf = input.value.slice(0, lastPosition);
+      let rightHalf = input.value.slice(lastPosition + 1, input.length);
+      input.value = `${leftHalf}${rightHalf}`;
+      returnFocus();
+    }
+  }
+
+  function checkIfEmulateKeysWerePressed() {
+    if (isArrowKeyPressed === true) {
+      document.querySelector(".key__ArrowDown").style.background = "none";
+      document.querySelector(".key__ArrowUp").style.background = "none";
+      document.querySelector(".key__ArrowLeft").style.background = "none";
+      document.querySelector(".key__ArrowRight").style.background = "none";
+      isArrowKeyPressed = false;
+    }
+  }
 
   function updateStatus() {
     if (keyboardLanguage === "Ru") {
@@ -1295,14 +1202,16 @@ function EnterIsPressed() {
       ).firstChild.firstChild.innerText = "Текущий язык:";
       document.querySelector(
         ".keyboard__status-wrapper"
-      ).firstChild.lastChild.innerText = "Русский язык. Используйте shift+alt для смены языка.";
+      ).firstChild.lastChild.innerText =
+        "Русский язык. Используйте shift+alt для смены языка.";
     } else {
       document.querySelector(
         ".keyboard__status-wrapper"
       ).firstChild.firstChild.innerText = "Current language:";
       document.querySelector(
         ".keyboard__status-wrapper"
-      ).firstChild.lastChild.innerText = " English Language. Use shift+alt to change language.";
+      ).firstChild.lastChild.innerText =
+        " English Language. Use shift+alt to change language.";
     }
     if (arrowsModeOn === false) {
       if (keyboardLanguage === "Ru") {
@@ -1340,7 +1249,7 @@ function EnterIsPressed() {
   }
 
   function printCharacter(character) {
-    console.log('printCharacter', lastPosition);
+    console.log("printCharacter", lastPosition);
     console.log(lastPosition);
     if (lastPosition === 0) {
       //После выделения selectionStart возвращает 0. Проводим двойную проверку последнего положения курсора.
@@ -1367,56 +1276,23 @@ function EnterIsPressed() {
     inputRow.value = `${leftHalf}${character}${rightHalf}`;
     lastPosition += 1;
     returnFocus();
-
   }
-
-  document
-    .querySelector(".input__text-from-keyboard")
-    .addEventListener("input", function () {
-      //При вводе текста с клавиатуры обновляем значения
-      lastPosition = document.querySelector(
-        ".input__text-from-keyboard"
-      ).selectionStart;
-      //inputLength = document.querySelector(".input__text-from-keyboard").value.length;
-    });
-
-  document.addEventListener("mouseup", function () {
-    if (
-      document.activeElement ===
-      document.querySelector(".input__text-from-keyboard")
-    ) {
-      selectedText = window.getSelection().toString();
-    }
-  });
-
-  window.addEventListener("mousedown", (event) => {
-    changeStyleOnClick(event.target);
-  });
-
-  window.addEventListener("mouseup", () => {
-    changeStyleOnClick2();
-  });
-
-  let changedElement;
 
   function changeStyleOnClick(event) {
     changedElement = event;
-    console.log('cnageStyleOnClick', lastPosition);
+    console.log("cnageStyleOnClick", lastPosition);
     let targetedKeyClass = event.classList;
     let eventTarget = event;
 
     if (
       targetedKeyClass.contains("key__big") ||
-      targetedKeyClass.contains("key__small") || 
+      targetedKeyClass.contains("key__small") ||
       targetedKeyClass.contains("key__text")
     ) {
       eventTarget.parentNode.style.background = "green";
-    } else if (
-      targetedKeyClass.contains("key")
-    ) {
+    } else if (targetedKeyClass.contains("key")) {
       eventTarget.style.background = "green";
-    } 
-
+    }
   }
 
   function changeStyleOnClick2() {
@@ -1424,8 +1300,8 @@ function EnterIsPressed() {
     let eventTarget = changedElement;
     if (
       targetedKeyClass.contains("key__big") ||
-      targetedKeyClass.contains("key__small") || 
-    targetedKeyClass.contains("key__text")
+      targetedKeyClass.contains("key__small") ||
+      targetedKeyClass.contains("key__text")
     ) {
       eventTarget.parentNode.style.background = "none";
     } else if (
@@ -1436,10 +1312,8 @@ function EnterIsPressed() {
     }
   }
 
-
-
   function returnFocus() {
-    console.log('returnFocus', lastPosition);
+    console.log("returnFocus", lastPosition);
     const input = document.querySelector(".input__text-from-keyboard");
     input.focus();
     input.setSelectionRange(lastPosition, lastPosition);
@@ -1450,14 +1324,19 @@ function EnterIsPressed() {
     document.querySelector(".key__ShiftRight").style.background = "green";
   }
 
-  // function makeShiftsWhite() {
-  //   document.querySelector(".key__ShiftLeft").style.background = "none";
-  //   document.querySelector(".key__ShiftRight").style.background = "none";
-  // }
-
-  console.log('Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6.');
-  console.log('Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на любой клавиатуре подсвечиваются обе клавиши с таким названием.');
-  console.log("Памятка 3. JS не может включить/выключить капслок у вас на физической клавиатуре, как и не может переключить на ней язык. Переключение языка и нажатие капслока на виртуальноя клавиатуре распространяется только на виртуальную клавиатуру");
-  console.log("p.s. Хотя практически можно попробовать обойти это, но к счастью по ТЗ нам это делать не надо")
-  console.log("Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелочек, но пока работают только стрелочки влево и вправо (на 01.05.2023)");
+  console.log(
+    "Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6."
+  );
+  console.log(
+    "Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на любой клавиатуре подсвечиваются обе клавиши с таким названием."
+  );
+  console.log(
+    "Памятка 3. JS не может включить/выключить капслок у вас на физической клавиатуре, как и не может переключить на ней язык. Переключение языка и нажатие капслока на виртуальноя клавиатуре распространяется только на виртуальную клавиатуру"
+  );
+  console.log(
+    "p.s. Хотя практически можно попробовать обойти это, но к счастью по ТЗ нам это делать не надо"
+  );
+  console.log(
+    "Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелочек, но пока работают только стрелочки влево и вправо (на 01.05.2023)"
+  );
 });
