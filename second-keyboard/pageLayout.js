@@ -76,6 +76,7 @@ window.addEventListener("load", function () {
 
   if (localStorage.getItem("keyboardLanguage") !== "En") {
     keyboardLanguage = 'Ru';
+    localStorage.setItem("keyboardLanguage", "Ru");
   } 
 
   const specialSymbols = [

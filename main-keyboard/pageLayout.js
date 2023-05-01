@@ -421,6 +421,7 @@ const ruSmall = [
 
 if (localStorage.getItem("keyboardLanguage") !== "En") {
   keyboardLanguage = 'Ru';
+  localStorage.setItem("keyboardLanguage", "Ru");
 } 
 
 function createPageLayout() {
