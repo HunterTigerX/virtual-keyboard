@@ -47,7 +47,7 @@ createPageLayout();
 
 window.addEventListener("load", function () {
   const rowkeysCount = [14, 15, 13, 13, 12];
-  let keyboardLanguage;
+  let keyboardLanguage = 'En';
   let keyboardCapitalisation = false;
   let isShiftPressed = false;
   let isCapslockPressed = false;
@@ -74,13 +74,10 @@ window.addEventListener("load", function () {
   let runDel;
   let runBS;
 
-  if (localStorage.getItem("keyboardLanguage") === "undefined") {
-    keyboardLanguage = "En";
-    localStorage.setItem("keyboardLanguage", keyboardLanguage);
-  } else {
+  if (localStorage.getItem("keyboardLanguage") !== "undefined") {
     keyboardLanguage = localStorage.getItem("keyboardLanguage");
-  }
-
+  } 
+  
   const specialSymbols = [
     //Клавиши с особыми размерами клавиш
     "BackSpace",
