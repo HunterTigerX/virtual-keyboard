@@ -102,7 +102,7 @@ window.addEventListener("load", function () {
     "Lang",
     "Язык",
     "Arrows mode",
-    "Режим стрелочек",
+    "Режим стрелок",
   ];
 
   const singleKeys = [
@@ -125,7 +125,7 @@ window.addEventListener("load", function () {
     "Lang",
     "Язык",
     "Arrows mode",
-    "Режим стрелочек",
+    "Режим стрелок",
   ];
 
   //using keycodes
@@ -406,7 +406,7 @@ window.addEventListener("load", function () {
       "Down",
       "Right",
       "Язык",
-      "Режим стрелочек",
+      "Режим стрелок",
     ],
   ];
 
@@ -472,7 +472,7 @@ window.addEventListener("load", function () {
       "Down",
       "Right",
       "Язык",
-      "Режим стрелочек",
+      "Режим стрелок",
     ],
   ];
 
@@ -497,7 +497,7 @@ window.addEventListener("load", function () {
       keyboardStatusLanguageText2
     );
 
-    const keyboardStatusArrows = document.createElement("div"); //Создаём панель статуса стрелочек
+    const keyboardStatusArrows = document.createElement("div"); //Создаём панель статуса стрелок
     keyboardStatusArrows.classList.add("div__status-block");
     const keyboardStatusArrowsText1 = document.createElement("span"); //Создаём панель статуса языка
     keyboardStatusArrowsText1.innerText = `Стрелочки`;
@@ -531,36 +531,36 @@ window.addEventListener("load", function () {
     if (isShiftPressed === true || keyboardShiftWasPressed === true) {
       makeShiftsGreenAgain();
     } else {
-      document.querySelector(".key__ShiftLeft").style.background = "none";
-      document.querySelector(".key__ShiftRight").style.background = "none";
+      document.querySelector(".key__ShiftLeft").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__ShiftRight").style.background = "rgb(250, 238, 238)";
     }
     if (isCapslockPressed === true || keyboardCapsWasPressed === true) {
-      document.querySelector(`.key__CapsLock`).style.background = "green";
+      document.querySelector(`.key__CapsLock`).style.background = "rgb(243, 178, 178)";
     } else {
-      document.querySelector(`.key__CapsLock`).style.background = "none";
+      document.querySelector(`.key__CapsLock`).style.background = "rgb(250, 238, 238)";
     }
     if (isAltPressed === true || keyboardAltWasPressed === true) {
-      document.querySelector(`.key__AltLeft`).style.background = "green";
-      document.querySelector(`.key__AltRight`).style.background = "green";
+      document.querySelector(`.key__AltLeft`).style.background = "rgb(243, 178, 178)";
+      document.querySelector(`.key__AltRight`).style.background = "rgb(243, 178, 178)";
     } else {
-      document.querySelector(`.key__AltLeft`).style.background = "none";
-      document.querySelector(`.key__AltRight`).style.background = "none";
+      document.querySelector(`.key__AltLeft`).style.background = "rgb(250, 238, 238)";
+      document.querySelector(`.key__AltRight`).style.background = "rgb(250, 238, 238)";
     }
 
     if (isCtrlPressed === true || keyboardCtrlWasPressed === true) {
-      document.querySelector(`.key__ControlLeft`).style.background = "green";
-      document.querySelector(`.key__ControlRight`).style.background = "green";
+      document.querySelector(`.key__ControlLeft`).style.background = "rgb(243, 178, 178)";
+      document.querySelector(`.key__ControlRight`).style.background = "rgb(243, 178, 178)";
     } else {
-      document.querySelector(`.key__ControlLeft`).style.background = "none";
-      document.querySelector(`.key__ControlRight`).style.background = "none";
+      document.querySelector(`.key__ControlLeft`).style.background = "rgb(250, 238, 238)";
+      document.querySelector(`.key__ControlRight`).style.background = "rgb(250, 238, 238)";
     }
 
     if (isWinPressed === true || keyboardWinWasPressed === true) {
-      document.querySelector(`.key__MetaLeft`).style.background = "green";
-      document.querySelector(`.key__MetaRight`).style.background = "green";
+      document.querySelector(`.key__MetaLeft`).style.background = "rgb(243, 178, 178)";
+      document.querySelector(`.key__MetaRight`).style.background = "rgb(243, 178, 178)";
     } else {
-      document.querySelector(`.key__MetaLeft`).style.background = "none";
-      document.querySelector(`.key__MetaRight`).style.background = "none";
+      document.querySelector(`.key__MetaLeft`).style.background = "rgb(250, 238, 238)";
+      document.querySelector(`.key__MetaRight`).style.background = "rgb(250, 238, 238)";
     }
 
     if (keyboardLanguage === "Ru") {
@@ -651,7 +651,7 @@ window.addEventListener("load", function () {
 
   document.addEventListener("keydown", function (event) {
     if (event.code !== "CapsLock") {
-      document.querySelector(".key__" + event.code).style.background = "green";
+      document.querySelector(".key__" + event.code).style.background = "rgb(243, 178, 178)";
     }
     checkIfEmulateKeysWerePressed();
 
@@ -715,18 +715,21 @@ window.addEventListener("load", function () {
   document.addEventListener("keyup", function (event) {
     const input = document.querySelector(".input__text-from-keyboard");
     if (document.activeElement === input) {
-      console.log('aaaa')
+      console.log("aaaa");
       selectedText = window.getSelection().toString();
       if (selectedText === "") {
         selectedText = false;
-      } else if (selectedText !== '') {
-        console.log('not empty')
+      } else if (selectedText !== "") {
+        console.log("not empty");
       }
     }
 
-    console.log(selectedText.length, document.querySelector(".input__text-from-keyboard").value.length)
+    console.log(
+      selectedText.length,
+      document.querySelector(".input__text-from-keyboard").value.length
+    );
     if (event.code !== "CapsLock") {
-      document.querySelector(".key__" + event.code).style.background = "none";
+      document.querySelector(".key__" + event.code).style.background = "rgb(250, 238, 238)";
     }
 
     if (event.code === "CapsLock") {
@@ -760,8 +763,8 @@ window.addEventListener("load", function () {
       } else {
         altIsPressed();
       }
-      document.querySelector(".key__AltLeft").style.background = "none";
-      document.querySelector(".key__AltRight").style.background = "none";
+      document.querySelector(".key__AltLeft").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__AltRight").style.background = "rgb(250, 238, 238)";
       keyboardAltWasPressed = false;
       isAltPressed = false;
     }
@@ -775,9 +778,6 @@ window.addEventListener("load", function () {
       keyboardDelWasPressed = false;
       lastPosition = input.selectionStart;
     }
-
-
-
   });
 
   document.addEventListener("click", (e) => {
@@ -819,8 +819,8 @@ window.addEventListener("load", function () {
         if (keyboardShiftWasPressed) {
           //Былы зажат шифт на компьютере
           altIsPressed();
-          document.querySelector(".key__AltLeft").style.background = "none";
-          document.querySelector(".key__AltRight").style.background = "none";
+          document.querySelector(".key__AltLeft").style.background = "rgb(250, 238, 238)";
+          document.querySelector(".key__AltRight").style.background = "rgb(250, 238, 238)";
         } else {
           altIsPressed();
         }
@@ -837,7 +837,7 @@ window.addEventListener("load", function () {
 
       if (
         e.target.innerText === "Arrows mode" ||
-        e.target.innerText === "Режим стрелочек"
+        e.target.innerText === "Режим стрелок"
       ) {
         arrowsModeOn = !arrowsModeOn;
         updateStatus();
@@ -1030,7 +1030,7 @@ window.addEventListener("load", function () {
     } else {
       let leftHalf = input.value.slice(0, lastPosition);
       let rightHalf = input.value.slice(lastPosition, input.length);
-      input.value = `${leftHalf}${"\t"}${rightHalf}`;    
+      input.value = `${leftHalf}${"\t"}${rightHalf}`;
     }
     lastPosition += 1;
     returnFocus();
@@ -1054,7 +1054,7 @@ window.addEventListener("load", function () {
         } else {
           inputRow.value = `${leftHalf}${" "}${rightHalf}`;
         }
-       } else {
+      } else {
         let leftHalf = input.value.slice(0, lastPosition);
         let rightHalf = input.value.slice(lastPosition, input.length);
         input.value = `${leftHalf}${" "}${rightHalf}`;
@@ -1077,7 +1077,8 @@ window.addEventListener("load", function () {
           input.length
         );
         selectedText = false;
-        if (selectedText.length === input.value.length) { //Если был выделен весь текст
+        if (selectedText.length === input.value.length) {
+          //Если был выделен весь текст
           inputRow.value = `${"\r\n"}`;
         } else {
           inputRow.value = `${leftHalf}${"\r\n"}${rightHalf}`;
@@ -1113,11 +1114,11 @@ window.addEventListener("load", function () {
   function altIsPressed() {
     isAltPressed = !isAltPressed;
     if (isAltPressed) {
-      document.querySelector(".key__AltLeft").style.background = "green";
-      document.querySelector(".key__AltRight").style.background = "green";
+      document.querySelector(".key__AltLeft").style.background = "rgb(243, 178, 178)";
+      document.querySelector(".key__AltRight").style.background = "rgb(243, 178, 178)";
     } else {
-      document.querySelector(".key__AltLeft").style.background = "none";
-      document.querySelector(".key__AltRight").style.background = "none";
+      document.querySelector(".key__AltLeft").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__AltRight").style.background = "rgb(250, 238, 238)";
     }
 
     if (keyboardShiftWasPressed) {
@@ -1144,11 +1145,11 @@ window.addEventListener("load", function () {
 
   // function greenCtrl() {
   //   if (isCtrlPressed === true) {
-  //     document.querySelector(".key__ControlLeft").style.background = "green";
-  //     document.querySelector(".key__ControlRight").style.background = "green";
+  //     document.querySelector(".key__ControlLeft").style.background = "rgb(243, 178, 178)";
+  //     document.querySelector(".key__ControlRight").style.background = "rgb(243, 178, 178)";
   //   } else {
-  //     document.querySelector(".key__ControlLeft").style.background = "none";
-  //     document.querySelector(".key__ControlRight").style.background = "none";
+  //     document.querySelector(".key__ControlLeft").style.background = "rgb(250, 238, 238)";
+  //     document.querySelector(".key__ControlRight").style.background = "rgb(250, 238, 238)";
   //   }
   // }
 
@@ -1159,11 +1160,11 @@ window.addEventListener("load", function () {
 
   function greenWin() {
     if (isWinPressed === true) {
-      document.querySelector(".key__MetaLeft").style.background = "green";
-      document.querySelector(".key__MetaRight").style.background = "green";
+      document.querySelector(".key__MetaLeft").style.background = "rgb(243, 178, 178)";
+      document.querySelector(".key__MetaRight").style.background = "rgb(243, 178, 178)";
     } else {
-      document.querySelector(".key__MetaLeft").style.background = "none";
-      document.querySelector(".key__MetaRight").style.background = "none";
+      document.querySelector(".key__MetaLeft").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__MetaRight").style.background = "rgb(250, 238, 238)";
     }
   }
 
@@ -1179,7 +1180,6 @@ window.addEventListener("load", function () {
     if (input.value.length === selectedText.length) {
       selectedText = false;
       inputRow.value = ``;
-      returnFocus();
     } else {
       if (keyboardBackSpaceWasPressed === false) {
         if (selectedText !== false) {
@@ -1191,7 +1191,6 @@ window.addEventListener("load", function () {
           );
           selectedText = false;
           inputRow.value = `${leftHalf}${rightHalf}`;
-          returnFocus();
         } else {
           if (lastPosition !== 0) {
             let leftHalf = input.value.slice(0, lastPosition - 1);
@@ -1201,7 +1200,7 @@ window.addEventListener("load", function () {
             } else {
               input.value = `${leftHalf}${rightHalf}`;
             }
-  
+
             if (lastPosition > 0) {
               lastPosition -= 1;
             }
@@ -1210,8 +1209,7 @@ window.addEventListener("load", function () {
         }
       }
     }
-
-
+    returnFocus();
   }
 
   function runDelNTimes() {
@@ -1227,7 +1225,7 @@ window.addEventListener("load", function () {
       selectedText = false;
       inputRow.value = ``;
       returnFocus();
-    }  else {
+    } else {
       if (selectedText !== false) {
         leftHalf = input.value.slice(0, lastPosition);
         rightHalf = input.value.slice(
@@ -1250,16 +1248,14 @@ window.addEventListener("load", function () {
         }
       }
     }
-
-
   }
 
   function checkIfEmulateKeysWerePressed() {
     if (isArrowKeyPressed === true) {
-      document.querySelector(".key__ArrowDown").style.background = "none";
-      document.querySelector(".key__ArrowUp").style.background = "none";
-      document.querySelector(".key__ArrowLeft").style.background = "none";
-      document.querySelector(".key__ArrowRight").style.background = "none";
+      document.querySelector(".key__ArrowDown").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__ArrowUp").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__ArrowLeft").style.background = "rgb(250, 238, 238)";
+      document.querySelector(".key__ArrowRight").style.background = "rgb(250, 238, 238)";
       isArrowKeyPressed = false;
     }
   }
@@ -1359,9 +1355,9 @@ window.addEventListener("load", function () {
       targetedKeyClass.contains("key__small") ||
       targetedKeyClass.contains("key__text")
     ) {
-      eventTarget.parentNode.style.background = "green";
+      eventTarget.parentNode.style.background = "rgb(243, 178, 178)";
     } else if (targetedKeyClass.contains("key")) {
-      eventTarget.style.background = "green";
+      eventTarget.style.background = "rgb(243, 178, 178)";
     }
   }
 
@@ -1373,12 +1369,12 @@ window.addEventListener("load", function () {
       targetedKeyClass.contains("key__small") ||
       targetedKeyClass.contains("key__text")
     ) {
-      eventTarget.parentNode.style.background = "none";
+      eventTarget.parentNode.style.background = "rgb(250, 238, 238)";
     } else if (
       targetedKeyClass.contains("key__text") ||
       targetedKeyClass.contains("key")
     ) {
-      eventTarget.style.background = "none";
+      eventTarget.style.background = "rgb(250, 238, 238)";
     }
   }
 
@@ -1389,10 +1385,9 @@ window.addEventListener("load", function () {
   }
 
   function makeShiftsGreenAgain() {
-    document.querySelector(".key__ShiftLeft").style.background = "green";
-    document.querySelector(".key__ShiftRight").style.background = "green";
+    document.querySelector(".key__ShiftLeft").style.background = "rgb(243, 178, 178)";
+    document.querySelector(".key__ShiftRight").style.background = "rgb(243, 178, 178)";
   }
-
 
   // console.log(
   //   "Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6."
@@ -1407,6 +1402,6 @@ window.addEventListener("load", function () {
   //   "p.s. Хотя практически можно попробовать обойти это, но к счастью по ТЗ нам это делать не надо"
   // );
   // console.log(
-  //   "Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелочек, но пока работают только стрелочки влево и вправо (на 01.05.2023)"
+  //   "Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелок, но пока работают только стрелочки влево и вправо (на 01.05.2023)"
   // );
 });

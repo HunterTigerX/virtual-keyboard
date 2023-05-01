@@ -1,11 +1,12 @@
 .keyboard__wrapper {
     width: auto;
+    max-width: 1150px;
     height: auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    border: 1px solid red;
     user-select: none;
+    margin: 0 auto;
 }
 
 .keyboard__row {
@@ -15,7 +16,6 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 5px;
-    border: 1px solid red;
 }
 
 .key {
@@ -26,6 +26,8 @@
     justify-content: left;
     position: relative;
     text-align: center;
+    border-radius: 10px;
+    background-color: rgb(250, 238, 238);
 }
 
 .key__big {
@@ -78,13 +80,16 @@
 .input__text-from-keyboard {
     margin: 20px;
     width: calc(100% - 40px);
-    width: 150px;
+    max-width: 1150px;
+    display: flex;
+    margin: 0 auto;
 }
 
 .keyboard__status-wrapper {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    max-width: 1150px;
     margin: 10px auto;
 }
 
@@ -104,7 +109,7 @@
 }
 
 .div__os-block {
-    height: 10px;
+    height: 20px;
     margin: 10px auto;
     text-align: center;
 }
