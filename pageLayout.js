@@ -70,7 +70,6 @@ window.addEventListener("load", function () {
   let isDelClicked = false;
   let isDelHold = false;
   let keyboardDelWasPressed = false;
-  let changedElement;
   let runDel;
   let runBS;
 
@@ -528,54 +527,21 @@ window.addEventListener("load", function () {
     }
 
     if (isShiftPressed === true || keyboardShiftWasPressed === true) {
-      makeShiftsGreenAgain();
-    } else {
-      document.querySelector(".key__ShiftLeft").style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(".key__ShiftRight").style.background =
-        "rgb(250, 238, 238)";
+      stayColor(`Shift`);
     }
     if (isCapslockPressed === true || keyboardCapsWasPressed === true) {
-      document.querySelector(`.key__CapsLock`).style.background =
-        "rgb(243, 178, 178)";
-    } else {
-      document.querySelector(`.key__CapsLock`).style.background =
-        "rgb(250, 238, 238)";
+      stayColor(`CapsLock`);
     }
     if (isAltPressed === true || keyboardAltWasPressed === true) {
-      document.querySelector(`.key__AltLeft`).style.background =
-        "rgb(243, 178, 178)";
-      document.querySelector(`.key__AltRight`).style.background =
-        "rgb(243, 178, 178)";
-    } else {
-      document.querySelector(`.key__AltLeft`).style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(`.key__AltRight`).style.background =
-        "rgb(250, 238, 238)";
+      stayColor(`Alt`);
     }
 
     if (isCtrlPressed === true || keyboardCtrlWasPressed === true) {
-      document.querySelector(`.key__ControlLeft`).style.background =
-        "rgb(243, 178, 178)";
-      document.querySelector(`.key__ControlRight`).style.background =
-        "rgb(243, 178, 178)";
-    } else {
-      document.querySelector(`.key__ControlLeft`).style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(`.key__ControlRight`).style.background =
-        "rgb(250, 238, 238)";
+      stayColor(`Ctrl`);
     }
 
     if (isWinPressed === true || keyboardWinWasPressed === true) {
-      document.querySelector(`.key__MetaLeft`).style.background =
-        "rgb(243, 178, 178)";
-      document.querySelector(`.key__MetaRight`).style.background =
-        "rgb(243, 178, 178)";
-    } else {
-      document.querySelector(`.key__MetaLeft`).style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(`.key__MetaRight`).style.background =
-        "rgb(250, 238, 238)";
+      stayColor(`Win`);
     }
 
     if (keyboardLanguage === "Ru") {
@@ -664,24 +630,43 @@ window.addEventListener("load", function () {
   createKeyboardWrapper();
   createKeyboard();
 
-  document.addEventListener("keydown", function (event) {
+  document.addEventListener("keydown", function (e) {
     const input = document.querySelector(".input__text-from-keyboard");
     input.focus();
-    if (event.code !== "CapsLock") {
-      document.querySelector(".key__" + event.code).style.background =
-        "rgb(243, 178, 178)";
+    if (e.code !== "CapsLock") {
+      if (e.code === "ShiftLeft" || e.code === "ShiftRight") {
+        let targetToChange = document.querySelector(`.key__ShiftLeft`);
+        let targetToChange2 = document.querySelector(`.key__ShiftRight`);
+        keepKeyColor(targetToChange, targetToChange2);
+      } else if (e.code === "ControlLeft" || e.code === "ControlRight") {
+        let targetToChange = document.querySelector(`.key__ControlLeft`);
+        let targetToChange2 = document.querySelector(`.key__ControlRight`);
+        keepKeyColor(targetToChange, targetToChange2);
+      } else if (e.code === "MetaLeft" || e.code === "MetaRight") {
+        let targetToChange = document.querySelector(`.key__MetaLeft`);
+        let targetToChange2 = document.querySelector(`.key__MetaRight`);
+        keepKeyColor(targetToChange, targetToChange2);
+      } else if (e.code === "AltLeft" || e.code === "AltRight") {
+        let targetToChange = document.querySelector(`.key__AltLeft`);
+        let targetToChange2 = document.querySelector(`.key__AltRight`);
+        keepKeyColor(targetToChange, targetToChange2);
+      } else {
+        let targetToChange = document.querySelector(`.key__${e.code}`);
+        keepKeyColor(targetToChange);
+      }
     }
+
     checkIfEmulateKeysWerePressed();
 
-    if (event.code === "CapsLock") {
-      event.preventDefault();
+    if (e.code === "CapsLock") {
+      e.preventDefault();
       if (keyboardCapsWasPressed === false) {
         capsLockIsPressed();
       }
       keyboardCapsWasPressed = true;
       return;
     }
-    if (event.code === "ControlLeft" || event.code === "ControlRight") {
+    if (e.code === "ControlLeft" || e.code === "ControlRight") {
       if (keyboardCtrlWasPressed === false) {
         ctrlIsPressed();
       }
@@ -689,23 +674,23 @@ window.addEventListener("load", function () {
       return;
     }
 
-    if (event.code === "Tab") {
+    if (e.code === "Tab") {
       tabKeyIsPressed();
-      event.preventDefault();
+      e.preventDefault();
       return;
     }
 
-    if (event.code === "Space") {
+    if (e.code === "Space") {
       spaceKeyIsPressed();
-      event.preventDefault();
+      e.preventDefault();
       return;
     }
 
-    if (event.code === "Enter") {
+    if (e.code === "Enter") {
       lastPosition += 1;
     }
 
-    if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+    if (e.code === "ShiftLeft" || e.code === "ShiftRight") {
       if (isShiftPressed === false) {
         //Если мы не нажимали на шифт на вирт клаве
         if (keyboardShiftWasPressed === false) {
@@ -716,27 +701,33 @@ window.addEventListener("load", function () {
       keyboardShiftWasPressed = true;
     }
 
-    if (event.code === "AltLeft" || event.code === "AltRight") {
-      event.preventDefault();
+    if (e.code === "AltLeft" || e.code === "AltRight") {
+      e.preventDefault();
       if (keyboardAltWasPressed === false) {
+        keyboardAltWasPressed = true;
         altIsPressed();
       }
       keyboardAltWasPressed = true;
     }
 
-    if (event.code === "Backspace") {
+    if (e.code === "Backspace") {
       keyboardBackSpaceWasPressed = true;
       backSpaceIsPressed();
     }
 
-    if (event.code === "Del") {
+    if (e.code === "Del") {
       keyboardDelWasPressed = true;
       DelIsPressed();
     }
   });
 
-  document.addEventListener("keyup", function (event) {
+  document.addEventListener("keyup", function (e) {
     const input = document.querySelector(".input__text-from-keyboard");
+
+    if (e.code !== "CapsLock") {
+      removeKeyColor(e.code);
+    }
+
     if (document.activeElement === input) {
       selectedText = window.getSelection().toString();
       if (selectedText === "") {
@@ -744,24 +735,18 @@ window.addEventListener("load", function () {
       }
     }
 
-    if (event.code !== "CapsLock") {
-      document.querySelector(".key__" + event.code).style.background =
-        "rgb(250, 238, 238)";
-    }
-
-    if (event.code === "CapsLock") {
+    if (e.code === "CapsLock") {
       keyboardCapsWasPressed = false;
     }
 
-    if (event.code === "ControlLeft" || event.code === "ControlRight") {
+    if (e.code === "ControlLeft" || e.code === "ControlRight") {
       keyboardCtrlWasPressed = false;
       isCtrlPressed = false;
-      greenCtrl();
     }
 
-    if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+    if (e.code === "ShiftLeft" || e.code === "ShiftRight") {
       if (doNotChangeLang === true) {
-        /* Если не менялся язык */
+        // Если не менялся язык
         if (keyboardAltWasPressed === false || isAltPressed === false) {
           //Если не был нажат альт во время отпускания клавиши
           doNotChangeLang = false;
@@ -780,26 +765,22 @@ window.addEventListener("load", function () {
       createKeyboard();
     }
 
-    if (event.code === "AltLeft" || event.code === "AltRight") {
+    if (e.code === "AltLeft" || e.code === "AltRight") {
       if (doNotChangeLang === true) {
         doNotChangeLang = false;
       } else {
         altIsPressed();
       }
-      document.querySelector(".key__AltLeft").style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(".key__AltRight").style.background =
-        "rgb(250, 238, 238)";
       keyboardAltWasPressed = false;
       isAltPressed = false;
     }
 
-    if (event.code === "Backspace") {
+    if (e.code === "Backspace") {
       keyboardBackSpaceWasPressed = false;
       lastPosition = input.selectionStart;
     }
 
-    if (event.code === "Delete") {
+    if (e.code === "Delete") {
       keyboardDelWasPressed = false;
       lastPosition = input.selectionStart;
     }
@@ -821,36 +802,23 @@ window.addEventListener("load", function () {
 
       if (e.target.innerText === "Tab") {
         tabKeyIsPressed();
-        //Если нажат Шифт
       }
 
       if (e.target.innerText === "Space" || e.target.innerText === "Пробел") {
         spaceKeyIsPressed();
-        //Если нажат Шифт
       }
 
       if (e.target.innerText === "Enter") {
         EnterIsPressed();
-        //Если нажат Шифт
       }
       if (e.target.innerText === "Shift") {
         returnFocus();
         shiftIsPressed();
-        //Если нажат Шифт
       }
 
       if (e.target.innerText === "Alt") {
         returnFocus();
-        if (keyboardShiftWasPressed) {
-          //Былы зажат шифт на компьютере
-          altIsPressed();
-          document.querySelector(".key__AltLeft").style.background =
-            "rgb(250, 238, 238)";
-          document.querySelector(".key__AltRight").style.background =
-            "rgb(250, 238, 238)";
-        } else {
-          altIsPressed();
-        }
+        altIsPressed();
       }
       if (e.target.innerText === "Ctrl") {
         if (!keyboardCtrlWasPressed) {
@@ -971,6 +939,44 @@ window.addEventListener("load", function () {
   });
 
   document.addEventListener("mousedown", function (e) {
+    if (e.target.classList.contains("key")) {
+      if (!singleKeys.includes(e.target.firstChild.innerText)) {
+        addColor([e.target.classList[1]]);
+      }
+    } else if (
+      e.target.classList.contains("key__big") || //Если мы нажали на вложенный элемент
+      e.target.classList.contains("key__small")
+    ) {
+      addColor([e.target.parentNode.classList[1]]);
+    } else {
+      if (
+        e.target.innerText === `Tab` ||
+        e.target.innerText === `BackSpace` ||
+        e.target.innerText === `Del` ||
+        e.target.innerText === `Enter` ||
+        e.target.innerText === `Up` ||
+        e.target.innerText === `Down` ||
+        e.target.innerText === `Left` ||
+        e.target.innerText === `Right` ||
+        e.target.innerText === `Язык` ||
+        e.target.innerText === `Lang` ||
+        e.target.innerText === `Режим стрелок` ||
+        e.target.innerText === `Arrows mode` ||
+        e.target.innerText === `Space` ||
+        e.target.innerText === `Пробел`
+      ) {
+        addColor([e.target.parentNode.classList[1]]);
+      } else if (
+        e.target.innerText === `CapsLock` ||
+        e.target.innerText === `Shift` ||
+        e.target.innerText === `Ctrl` ||
+        e.target.innerText === `Win` ||
+        e.target.innerText === `Alt`
+      ) {
+        stayColor(e.target.innerText);
+      }
+    }
+
     if (e.target.classList.contains("key__text")) {
       if (e.target.innerText === "BackSpace") {
         isBackSpaceClicked = true;
@@ -987,20 +993,13 @@ window.addEventListener("load", function () {
         e.target.innerText === "Down" ||
         e.target.innerText === "Up"
       ) {
-        event.preventDefault();
+        e.preventDefault();
       }
     }
-
-    changeStyleOnClick(e.target);
   });
 
   document.addEventListener("mouseup", function () {
     const input = document.querySelector(".input__text-from-keyboard");
-    // if () {
-    //   lastPosition = document.querySelector(
-    //     ".input__text-from-keyboard"
-    //   ).selectionStart;
-    // }
     clearInterval(runBS);
     clearInterval(runDel);
     if (isBackSpaceHold === false && isBackSpaceClicked === true) {
@@ -1021,8 +1020,6 @@ window.addEventListener("load", function () {
         selectedText = false;
       }
     }
-
-    changeStyleOnClick2();
   });
 
   let inputRow = document.querySelector(".input__text-from-keyboard");
@@ -1030,7 +1027,6 @@ window.addEventListener("load", function () {
   inputRow.addEventListener("input", function () {
     //При вводе текста с клавиатуры обновляем значения
     lastPosition = inputRow.selectionStart;
-    //inputLength = document.querySelector(".input__text-from-keyboard").value.length;
   });
 
   function changeLanguage() {
@@ -1141,16 +1137,8 @@ window.addEventListener("load", function () {
 
   function altIsPressed() {
     isAltPressed = !isAltPressed;
-    if (isAltPressed) {
-      document.querySelector(".key__AltLeft").style.background =
-        "rgb(243, 178, 178)";
-      document.querySelector(".key__AltRight").style.background =
-        "rgb(243, 178, 178)";
-    } else {
-      document.querySelector(".key__AltLeft").style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(".key__AltRight").style.background =
-        "rgb(250, 238, 238)";
+    if (!isAltPressed && !keyboardAltWasPressed) {
+      removeColor("Alt");
     }
 
     if (keyboardShiftWasPressed) {
@@ -1164,7 +1152,11 @@ window.addEventListener("load", function () {
         //Был нажат шифт на вирт. клавиатуре
         isAltPressed = false;
         isShiftPressed = false;
-        keyboardCapitalisation = false;
+        if (isCapslockPressed) {
+          keyboardCapitalisation = !keyboardCapitalisation;
+        } else {
+          keyboardCapitalisation = false;
+        }
         changeLanguage();
       }
     }
@@ -1189,42 +1181,19 @@ window.addEventListener("load", function () {
         );
       }
     }
-    greenCtrl();
+    if (isCtrlPressed === false) {
+      removeColor("Ctrl");
+    }
+
     if (!isCtrlPressed) {
       selectedText = false;
     }
   }
 
-  function greenCtrl() {
-    if (isCtrlPressed === true) {
-      document.querySelector(".key__ControlLeft").style.background =
-        "rgb(243, 178, 178)";
-      document.querySelector(".key__ControlRight").style.background =
-        "rgb(243, 178, 178)";
-    } else {
-      document.querySelector(".key__ControlLeft").style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(".key__ControlRight").style.background =
-        "rgb(250, 238, 238)";
-    }
-  }
-
   function winPressed() {
     isWinPressed = !isWinPressed;
-    greenWin();
-  }
-
-  function greenWin() {
-    if (isWinPressed === true) {
-      document.querySelector(".key__MetaLeft").style.background =
-        "rgb(243, 178, 178)";
-      document.querySelector(".key__MetaRight").style.background =
-        "rgb(243, 178, 178)";
-    } else {
-      document.querySelector(".key__MetaLeft").style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(".key__MetaRight").style.background =
-        "rgb(250, 238, 238)";
+    if (!isWinPressed) {
+      removeColor(`Win`);
     }
   }
 
@@ -1311,14 +1280,6 @@ window.addEventListener("load", function () {
 
   function checkIfEmulateKeysWerePressed() {
     if (isArrowKeyPressed === true) {
-      document.querySelector(".key__ArrowDown").style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(".key__ArrowUp").style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(".key__ArrowLeft").style.background =
-        "rgb(250, 238, 238)";
-      document.querySelector(".key__ArrowRight").style.background =
-        "rgb(250, 238, 238)";
       isArrowKeyPressed = false;
     }
   }
@@ -1419,7 +1380,7 @@ window.addEventListener("load", function () {
           returnFocus();
         }
       } else if (ctrlStatement && pasteChar) {
-        if (localStorage.getItem("ctrlStorage") !== undefined) {
+        if (localStorage.getItem("ctrlStorage") !== `false`) {
           if (selectedText !== false) {
             if (input.value.length === selectedText.length) {
               selectedText = false;
@@ -1448,7 +1409,19 @@ window.addEventListener("load", function () {
           }
           lastPosition += localStorage.getItem("ctrlStorage").length;
           returnFocus();
+        } else {
+          if (selectedText !== false) {
+            if (input.value.length === selectedText.length) {
+              inputRow.value = ``;
+              returnFocus();
+            } else {
+              let leftHalf = input.value.slice(0, lastPosition);
+              let rightHalf = input.value.slice(lastPosition, input.length);
+              input.value = `${leftHalf}${rightHalf}`;
+            }
+          }
         }
+        returnFocus();
       } else if (ctrlStatement && selectChar) {
         input.focus();
         input.setSelectionRange(0, input.value.length);
@@ -1471,7 +1444,9 @@ window.addEventListener("load", function () {
             }
             selectedText = false;
             isCtrlPressed = false;
-            greenCtrl();
+            if (isCtrlPressed !== true) {
+              removeColor("Ctrl");
+            }
             returnFocus();
           }
         }
@@ -1483,8 +1458,6 @@ window.addEventListener("load", function () {
       } else {
         if (selectedText !== false) {
           //Если был выделен текст
-
-          //Сюда добавить ctrl+c ctrl+x ctrl+v
           leftHalf = input.value.slice(0, lastPosition);
           rightHalf = input.value.slice(
             lastPosition + selectedText.length,
@@ -1502,57 +1475,186 @@ window.addEventListener("load", function () {
     }
   }
 
-  function changeStyleOnClick(event) {
-    changedElement = event;
-    let targetedKeyClass = event.classList;
-    let eventTarget = event;
-
-    if (
-      targetedKeyClass.contains("key__big") ||
-      targetedKeyClass.contains("key__small") ||
-      targetedKeyClass.contains("key__text")
-    ) {
-      eventTarget.parentNode.style.background = "rgb(243, 178, 178)";
-    } else if (targetedKeyClass.contains("key")) {
-      eventTarget.style.background = "rgb(243, 178, 178)";
-    }
-  }
-
-  function changeStyleOnClick2() {
-    let targetedKeyClass = changedElement.classList;
-    let eventTarget = changedElement;
-    if (
-      targetedKeyClass.contains("key__big") ||
-      targetedKeyClass.contains("key__small") ||
-      targetedKeyClass.contains("key__text")
-    ) {
-      eventTarget.parentNode.style.background = "rgb(250, 238, 238)";
-    } else if (
-      targetedKeyClass.contains("key__text") ||
-      targetedKeyClass.contains("key")
-    ) {
-      eventTarget.style.background = "rgb(250, 238, 238)";
-    }
-  }
-
   function returnFocus() {
     const input = document.querySelector(".input__text-from-keyboard");
     input.focus();
     input.setSelectionRange(lastPosition, lastPosition);
   }
 
-  function makeShiftsGreenAgain() {
-    document.querySelector(".key__ShiftLeft").style.background =
-      "rgb(243, 178, 178)";
-    document.querySelector(".key__ShiftRight").style.background =
-      "rgb(243, 178, 178)";
+  function addColor(array) {
+    for (let i = 0; i < array.length; i++) {
+      let targetToChange = document.querySelector(`.${array[i]}`);
+      if (targetToChange !== null) {
+        targetToChange.classList.add(`changeKeyColor`);
+      }
+      targetToChange.onanimationend = () => {
+        targetToChange.classList.remove(`changeKeyColor`);
+        if (targetToChange !== null) {
+          targetToChange.classList.add(`changeKeysColorBack`);
+        }
+        targetToChange.onanimationend = () => {
+          targetToChange.classList.remove(`changeKeysColorBack`);
+        };
+      };
+    }
+  }
+
+  function stayColor(text) {
+    let targetToChange,
+      targetToChange2 = false;
+    if (text === `Shift`) {
+      targetToChange = document.querySelector(`.key__ShiftLeft`);
+      targetToChange2 = document.querySelector(`.key__ShiftRight`);
+    } else if (text === `Ctrl`) {
+      targetToChange = document.querySelector(`.key__ControlLeft`);
+      targetToChange2 = document.querySelector(`.key__ControlRight`);
+    } else if (text === `Win`) {
+      targetToChange = document.querySelector(`.key__MetaLeft`);
+      targetToChange2 = document.querySelector(`.key__MetaRight`);
+    } else if (text === `Alt`) {
+      targetToChange = document.querySelector(`.key__AltLeft`);
+      targetToChange2 = document.querySelector(`.key__AltRight`);
+    } else if (text === `CapsLock`) {
+      targetToChange = document.querySelector(`.key__CapsLock`);
+    }
+
+    if (targetToChange !== null) {
+      targetToChange.classList.add(`changeKeyColor`);
+    }
+    if (targetToChange2 !== false) {
+      targetToChange2.classList.add(`changeKeyColor`);
+    }
+    targetToChange.onanimationend = () => {
+      targetToChange = false;
+      targetToChange2 = false;
+    };
+  }
+
+  function removeColor(text) {
+    let targetToChange,
+      targetToChange2 = false;
+    if (text === `Shift`) {
+      targetToChange = document.querySelector(`.key__ShiftLeft`);
+      targetToChange2 = document.querySelector(`.key__ShiftRight`);
+    } else if (text === `Ctrl`) {
+      targetToChange = document.querySelector(`.key__ControlLeft`);
+      targetToChange2 = document.querySelector(`.key__ControlRight`);
+    } else if (text === `Win`) {
+      targetToChange = document.querySelector(`.key__MetaLeft`);
+      targetToChange2 = document.querySelector(`.key__MetaRight`);
+    } else if (text === `Alt`) {
+      targetToChange = document.querySelector(`.key__AltLeft`);
+      targetToChange2 = document.querySelector(`.key__AltRight`);
+    } else if (text === `CapsLock`) {
+      targetToChange = document.querySelector(`.key__CapsLock`);
+    }
+
+    if (targetToChange !== null) {
+      targetToChange.classList.add(`changeKeysColorBack`);
+    }
+    if (
+      typeof targetToChange !== "undefined" &&
+      targetToChange.classList.contains("changeKeyColor")
+    ) {
+      targetToChange.classList.remove(`changeKeyColor`);
+    }
+
+    targetToChange.onanimationend = () => {
+      if (typeof targetToChange !== "undefined" && targetToChange !== false) {
+        if (targetToChange.classList.contains("changeKeysColorBack")) {
+          targetToChange.classList.remove(`changeKeysColorBack`);
+        }
+      }
+      targetToChange = false;
+    };
+
+    if (targetToChange2 !== false) {
+      if (targetToChange2.classList.contains("changeKeyColor")) {
+        targetToChange2.classList.remove(`changeKeyColor`);
+        targetToChange2.classList.add(`changeKeysColorBack`);
+      }
+      targetToChange2.onanimationend = () => {
+        if (
+          typeof targetToChange2 !== "undefined" &&
+          targetToChange2 !== false
+        ) {
+          if (targetToChange2.classList.contains("changeKeysColorBack")) {
+            targetToChange2.classList.remove(`changeKeysColorBack`);
+          }
+        }
+        targetToChange2 = false;
+      };
+    }
+  }
+
+  function removeKeyColor(e) {
+    let targetToChange,
+      targetToChange2 = false;
+    if (e === "ShiftLeft" || e === "ShiftRight") {
+      targetToChange = document.querySelector(`.key__ShiftLeft`);
+      targetToChange2 = document.querySelector(`.key__ShiftRight`);
+    } else if (e === "ControlLeft" || e === "ControlRight") {
+      targetToChange = document.querySelector(`.key__ControlLeft`);
+      targetToChange2 = document.querySelector(`.key__ControlRight`);
+    } else if (e === "MetaLeft" || e === "MetaRight") {
+      targetToChange = document.querySelector(`.key__MetaLeft`);
+      targetToChange2 = document.querySelector(`.key__MetaRight`);
+    } else if (e === "AltLeft" || e === "AltRight") {
+      targetToChange = document.querySelector(`.key__AltLeft`);
+      targetToChange2 = document.querySelector(`.key__AltRight`);
+    } else {
+      targetToChange = document.querySelector(`.key__${e}`);
+    }
+    if (targetToChange !== null) {
+      if (typeof targetToChange !== "undefined" && targetToChange !== false) {
+        if (targetToChange.classList.contains("changeKeyColor")) {
+          targetToChange.classList.remove(`changeKeyColor`);
+          targetToChange.classList.add(`changeKeysColorBack`);
+        }
+      }
+    }
+
+    targetToChange.onanimationend = () => {
+      if (typeof targetToChange !== "undefined" && targetToChange !== false) {
+        if (targetToChange.classList.contains("changeKeysColorBack")) {
+          targetToChange.classList.remove(`changeKeysColorBack`);
+        }
+        targetToChange = false;
+      }
+    };
+
+    if (targetToChange2 !== false) {
+      if (targetToChange2.classList.contains("changeKeyColor")) {
+        targetToChange2.classList.add(`changeKeysColorBack`);
+        targetToChange2.classList.remove(`changeKeyColor`);
+        targetToChange2.onanimationend = () => {
+          if (
+            typeof targetToChange2 !== "undefined" &&
+            targetToChange2 !== false
+          ) {
+            if (targetToChange2.classList.contains("changeKeysColorBack")) {
+              targetToChange2.classList.remove(`changeKeysColorBack`);
+            }
+          }
+        };
+      }
+    }
+  }
+
+  function keepKeyColor(targetToChange, targetToChange2 = false) {
+    if (targetToChange !== null) {
+      targetToChange.classList.add(`changeKeyColor`);
+    }
+    if (targetToChange2 !== false) {
+      targetToChange2.classList.add(`changeKeyColor`);
+    }
   }
 
   console.log(
     "Памятка 1. При наличии у вас не PS2 клавиатуры, максимальное количество одновременных нажатий клавиш - 6."
   );
   console.log(
-    "Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на любой клавиатуре подсвечиваются обе клавиши с таким названием."
+    "Памятка 2. В качестве основы использовалась виртуальная клавиатура Windows 10. В ней при нажатии на любой Shift, Alt, Ctrl на физической/виртуальной клавиатуре подсвечиваются обе клавиши с таким названием."
   );
   console.log(
     "Памятка 3. JS не может включить/выключить капслок у вас на физической клавиатуре, как и не может переключить на ней язык. Переключение языка и нажатие капслока на виртуальноя клавиатуре распространяется только на виртуальную клавиатуру"
@@ -1564,6 +1666,9 @@ window.addEventListener("load", function () {
     "Памятка 4. Стрелочки печатают стрелочки. По ТЗ этого достаточно. Однако дополнительно добавлен второй режим стрелок, но пока работают только стрелочки влево и вправо (на 01.05.2023)"
   );
   console.log(
-    "Памятка 5. Добавлены Ctrl+C Ctrl+V Ctrl+X Ctrl+A. Помните, буфер обмена в моей клавиатуре отличается от того, который хранит ctrl+v на физической клавиатуре"
+    "Памятка 5. Добавлены Ctrl+C Ctrl+V Ctrl+X Ctrl+A. Помните, буфер обмена в виртуальной клавиатуре отличается от того, который хранит ctrl+v на физической клавиатуре и у меня не хватает времени это сделать, просто потому что я могу, хотя очень хочется"
+  );
+    console.log(
+    `Памятка 6. Если при нажатии 100500 кнопок одновременно, у вас подсвечиваются не все, это из-за особенности JS. Я проверил на всякий случай перед дедлайном, пока думал, почему оно порой "хватает" 6 клавиш, порой только 2, порой от 2 до 6, если зажимать буквы печатающие символы одновременно, но как оказалось, это нормальное поведение`
   );
 });

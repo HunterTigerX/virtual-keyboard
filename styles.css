@@ -50,7 +50,7 @@
     position: absolute;
     bottom: 10px;
     right: 10px;
-  /*  border: 1px dotted salmon; */
+    /*  border: 1px dotted salmon; */
 }
 
 .key__text {
@@ -112,4 +112,34 @@
     height: 20px;
     margin: 10px auto;
     text-align: center;
+}
+
+.changeKeysColorBack {
+    background-color: rgb(250, 238, 238);
+    animation: changeKeysColor 0.5s ease-in;
+}
+
+@keyframes changeKeysColor {
+    from {
+        background-color: rgb(243, 178, 178);
+    }
+
+    to {
+        background-color: rgb(250, 238, 238);
+    }
+}
+
+
+.changeKeyColor {
+    background-color: rgb(243, 178, 178);
+    animation: changeKeysColorBack 0.5s ease-in;
+}
+
+@keyframes changeKeysColorBack {
+    from {
+        background-color: rgb(250, 238, 238);
+    }
+    to {
+        background-color: rgb(243, 178, 178);
+    }
 }
