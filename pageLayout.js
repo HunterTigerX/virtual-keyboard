@@ -670,6 +670,12 @@ window.addEventListener("load", function () {
       return;
     }
 
+    if (event.code === "Space") {
+      spaceKeyIsPressed();
+      event.preventDefault();
+      return;
+    }
+
     if (event.code === "Enter") {
       lastPosition += 1;
     }
@@ -780,6 +786,11 @@ window.addEventListener("load", function () {
         //Если нажат Шифт
       }
 
+      if (e.target.innerText === "Space" || e.target.innerText === "Пробел") {
+        spaceKeyIsPressed();
+        //Если нажат Шифт
+      }
+
       if (e.target.innerText === "Enter") {
         EnterIsPressed();
         //Если нажат Шифт
@@ -803,7 +814,7 @@ window.addEventListener("load", function () {
       }
       if (e.target.innerText === "Ctrl") {
         returnFocus();
-       // ctrlIsPressed();
+        // ctrlIsPressed();
       }
 
       if (e.target.innerText === "Win") {
@@ -891,18 +902,15 @@ window.addEventListener("load", function () {
     }
 
     if (e.target.classList.contains("key")) {
-
       //Если была нажата буква или знак
       if (!singleKeys.includes(e.target.firstChild.innerText)) {
-
         printCharacter(e.target.firstChild.innerText);
       }
-        //Если нажат шифт
+      //Если нажат шифт
       if (isShiftPressed && keyboardShiftWasPressed === false) {
         shiftIsPressed();
       }
     } else {
-
       if (
         e.target.classList.contains("key__big") || //Елси мы нажали на вложенный элемент
         e.target.classList.contains("key__small")
@@ -966,11 +974,9 @@ window.addEventListener("load", function () {
     isDelClicked = false;
     isDelHold = false;
 
-    if (
-      document.activeElement === input
-    ) {
+    if (document.activeElement === input) {
       selectedText = window.getSelection().toString();
-      if (selectedText === '') {
+      if (selectedText === "") {
         selectedText = false;
       }
     }
@@ -981,10 +987,10 @@ window.addEventListener("load", function () {
   let inputRow = document.querySelector(".input__text-from-keyboard");
 
   inputRow.addEventListener("input", function () {
-      //При вводе текста с клавиатуры обновляем значения
-      lastPosition = inputRow.selectionStart;
-      //inputLength = document.querySelector(".input__text-from-keyboard").value.length;
-    });
+    //При вводе текста с клавиатуры обновляем значения
+    lastPosition = inputRow.selectionStart;
+    //inputLength = document.querySelector(".input__text-from-keyboard").value.length;
+  });
 
   function changeLanguage() {
     if (keyboardLanguage === "Ru") {
@@ -1010,6 +1016,33 @@ window.addEventListener("load", function () {
     input.value = `${leftHalf}${"\t"}${rightHalf}`;
     lastPosition += 1;
     returnFocus();
+  }
+
+  function spaceKeyIsPressed() {
+    const input = document.querySelector(".input__text-from-keyboard");
+    if (selectedText !== false) {
+      let leftHalf = input.value.slice(0, lastPosition);
+      let rightHalf = input.value.slice(
+        lastPosition + selectedText.length,
+        input.length
+      );
+      selectedText = false;
+      if (selectedText.length === input.value.length) {
+        inputRow.value = ` `;
+      } else {
+        inputRow.value = `${leftHalf}${" "}${rightHalf}`;
+      }
+
+      lastPosition += 1;
+      returnFocus();
+    } else {
+      let leftHalf = input.value.slice(0, lastPosition);
+      let rightHalf = input.value.slice(lastPosition, input.length);
+      input.value = `${leftHalf}${" "}${rightHalf}`;
+      lastPosition += 1;
+      returnFocus();
+    }
+   
   }
 
   function EnterIsPressed() {
@@ -1105,34 +1138,33 @@ window.addEventListener("load", function () {
     let leftHalf, rightHalf;
     isBackSpaceHold = true;
 
-     if (selectedText !== false) {
-      //Если был выделен текст
-      leftHalf = input.value.slice(0, lastPosition);
-      rightHalf = input.value.slice(
-        lastPosition + selectedText.length,
-        input.length
-      );
-      selectedText = false;
-      inputRow.value = `${leftHalf}${rightHalf}`;
-      returnFocus();
-    } else {
-
     if (keyboardBackSpaceWasPressed === false) {
-      if (lastPosition !== 0) {
-        let leftHalf = input.value.slice(0, lastPosition - 1);
-        let rightHalf = input.value.slice(lastPosition, input.length);
-        if (lastPosition === 1 && input.value.length === 1) {
-          input.value = ``;
-        } else {
-          input.value = `${leftHalf}${rightHalf}`;
-        }
-  
-        if (lastPosition > 0) {
-          lastPosition -= 1;
-        } 
+      if (selectedText !== false) {
+        //Если был выделен текст
+        leftHalf = input.value.slice(0, lastPosition);
+        rightHalf = input.value.slice(
+          lastPosition + selectedText.length,
+          input.length
+        );
+        selectedText = false;
+        inputRow.value = `${leftHalf}${rightHalf}`;
         returnFocus();
+      } else {
+        if (lastPosition !== 0) {
+          let leftHalf = input.value.slice(0, lastPosition - 1);
+          let rightHalf = input.value.slice(lastPosition, input.length);
+          if (lastPosition === 1 && input.value.length === 1) {
+            input.value = ``;
+          } else {
+            input.value = `${leftHalf}${rightHalf}`;
+          }
+
+          if (lastPosition > 0) {
+            lastPosition -= 1;
+          }
+          returnFocus();
+        }
       }
-    } 
     }
   }
 
@@ -1155,7 +1187,6 @@ window.addEventListener("load", function () {
       inputRow.value = `${leftHalf}${rightHalf}`;
       returnFocus();
     } else {
-
       if (keyboardDelWasPressed !== true) {
         let leftHalf = input.value.slice(0, lastPosition);
         let rightHalf = input.value.slice(lastPosition + 1, input.length);
