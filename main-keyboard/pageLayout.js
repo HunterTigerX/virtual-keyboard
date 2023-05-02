@@ -963,10 +963,12 @@ window.addEventListener('load', () => {
         const targetToChange2 = document.querySelector('.key__ControlRight');
         keepKeyColor(targetToChange, targetToChange2);
       } else if (e.code === 'MetaLeft' || e.code === 'MetaRight') {
+        e.preventDefault();
         const targetToChange = document.querySelector('.key__MetaLeft');
         const targetToChange2 = document.querySelector('.key__MetaRight');
         keepKeyColor(targetToChange, targetToChange2);
       } else if (e.code === 'AltLeft' || e.code === 'AltRight') {
+        e.preventDefault();
         const targetToChange = document.querySelector('.key__AltLeft');
         const targetToChange2 = document.querySelector('.key__AltRight');
         keepKeyColor(targetToChange, targetToChange2);
