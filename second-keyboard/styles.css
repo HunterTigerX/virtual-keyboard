@@ -26,8 +26,8 @@
     justify-content: left;
     position: relative;
     text-align: center;
-    border-radius: 10px;
-    background-color: rgb(250, 238, 238);
+    background: rgb(247, 243, 243);
+    transition: 1s ease-in-out
 }
 
 .key__big {
@@ -74,7 +74,7 @@
 }
 
 .key__pressed {
-    background-color: gray;
+    background: gray;
 }
 
 .input__text-from-keyboard {
@@ -108,37 +108,24 @@
     opacity: 0;
 }
 
+.key:hover {
+    border-radius: 10px;
+    background: rgb(214, 255, 168);
+}
+
 .div__os-block {
     height: 20px;
     margin: 10px auto;
     text-align: center;
 }
 
-.changeKeysColorBack {
-    background-color: rgb(250, 238, 238);
-    animation: changeKeysColor 0.5s ease-in;
+.changed__color {
+    border-radius: 10px;
+    background: rgb(110, 182, 248)!important;
+    transition: 1s ease-in-out;
 }
 
-@keyframes changeKeysColor {
-    from {
-        background-color: rgb(243, 178, 178);
-    }
-
-    to {
-        background-color: rgb(250, 238, 238);
-    }
-}
-
-.changeKeyColor {
-    background-color: rgb(243, 178, 178);
-    animation: changeKeysColorBack 0.5s ease-in;
-}
-
-@keyframes changeKeysColorBack {
-    from {
-        background-color: rgb(250, 238, 238);
-    }
-    to {
-        background-color: rgb(243, 178, 178);
-    }
+.shift__fast {
+    border-radius: 10px;
+    background: rgb(110, 182, 248)!important;
 }
