@@ -522,58 +522,6 @@ const ruSmallShift = [
   ],
 ];
 
-const ruSmallCaps = [
-  [
-    'ё',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '0',
-    '-',
-    '=',
-    'BackSpace',
-  ],
-  [
-    'Tab',
-    'й',
-    'ц',
-    'у',
-    'к',
-    'е',
-    'н',
-    'г',
-    'ш',
-    'щ',
-    'з',
-    'х',
-    'ъ',
-    '\\',
-    'Del',
-  ],
-  ['CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter'],
-  ['Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', 'Up', 'Shift'],
-  [
-    'Ctrl',
-    'Win',
-    'Alt',
-    'Пробел',
-    'Alt',
-    'Win',
-    'Ctrl',
-    'Left',
-    'Down',
-    'Right',
-    'Язык',
-    'Режим стрелок',
-  ],
-];
-
 const ruShiftCaps = [
   [
     '~',
@@ -730,7 +678,7 @@ window.addEventListener('load', () => {
     if (keyboardLanguage === 'En') {
       if (isShiftPressed && isCapslockPressed) {
         keyboardLanguageBigKeys = engBigCaps;
-        keyboardLanguageSmallkeys = eNshiftCaps; 
+        keyboardLanguageSmallkeys = eNshiftCaps;
       } else if (isShiftPressed && !isCapslockPressed) {
         keyboardLanguageBigKeys = engSmallShift;
         keyboardLanguageSmallkeys = engBigShift;
@@ -744,7 +692,7 @@ window.addEventListener('load', () => {
     } else if (keyboardLanguage === 'Ru') {
       if (isShiftPressed && isCapslockPressed) {
         keyboardLanguageBigKeys = ruBigCaps;
-        keyboardLanguageSmallkeys = ruShiftCaps; 
+        keyboardLanguageSmallkeys = ruShiftCaps;
       } else if (isShiftPressed && !isCapslockPressed) {
         keyboardLanguageBigKeys = ruSmallShift;
         keyboardLanguageSmallkeys = ruBigShift;
