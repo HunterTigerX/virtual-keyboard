@@ -154,7 +154,7 @@ const keycodesOfKeyboard = [
   ],
 ];
 
-const engSmall = [
+const engSmallShift = [
   [
     '`',
     '1',
@@ -206,7 +206,112 @@ const engSmall = [
   ],
 ];
 
-const engBig = [
+const eNshiftCaps = [
+  [
+    '~',
+    '!',
+    '@',
+    '#',
+    '$',
+    '%',
+    '^',
+    '&',
+    '*',
+    '(',
+    ')',
+    '_',
+    '+',
+    'BackSpace',
+  ],
+  [
+    'Tab',
+    'q',
+    'w',
+    'e',
+    'r',
+    't',
+    'y',
+    'u',
+    'i',
+    'o',
+    'p',
+    '[',
+    ']',
+    '\\',
+    'Del',
+  ],
+  ['CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'Enter'],
+  ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Up', 'Shift'],
+  [
+    'Ctrl',
+    'Win',
+    'Alt',
+    'Space',
+    'Alt',
+    'Win',
+    'Ctrl',
+    'Left',
+    'Down',
+    'Right',
+    'Lang',
+    'Arrows mode',
+  ],
+];
+
+const engBigCaps = [
+  // Большие буквы в клавиатуре и буквы с текстом
+  [
+    '`',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '0',
+    '-',
+    '=',
+    'BackSpace',
+  ],
+  [
+    'Tab',
+    'Q',
+    'W',
+    'E',
+    'R',
+    'T',
+    'Y',
+    'U',
+    'I',
+    'O',
+    'P',
+    '{',
+    '}',
+    '|',
+    'Del',
+  ],
+  ['CapsLock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 'Enter'],
+  ['Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 'Up', 'Shift'],
+  [
+    'Ctrl',
+    'Win',
+    'Alt',
+    'Space',
+    'Alt',
+    'Win',
+    'Ctrl',
+    'Left',
+    'Down',
+    'Right',
+    'Lang',
+    'Arrows mode',
+  ],
+];
+
+const engBigShift = [
   // Большие буквы в клавиатуре и буквы с текстом
   [
     '~',
@@ -259,7 +364,7 @@ const engBig = [
   ],
 ];
 
-const ruBig = [
+const ruBigShift = [
   // Большие буквы в клавиатуре и буквы с текстом
   [
     '~',
@@ -312,7 +417,60 @@ const ruBig = [
   ],
 ];
 
-const ruSmall = [
+const ruBigCaps = [
+  // Большие буквы в клавиатуре и буквы с текстом
+  [
+    '`',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '0',
+    '-',
+    '=',
+    'BackSpace',
+  ],
+  [
+    'Tab',
+    'Й',
+    'Ц',
+    'У',
+    'К',
+    'Е',
+    'Н',
+    'Г',
+    'Ш',
+    'Щ',
+    'З',
+    'Х',
+    'Ъ',
+    '/',
+    'Del',
+  ],
+  ['CapsLock', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', 'Enter'],
+  ['Shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', 'Up', 'Shift'],
+  [
+    'Ctrl',
+    'Win',
+    'Alt',
+    'Пробел',
+    'Alt',
+    'Win',
+    'Ctrl',
+    'Left',
+    'Down',
+    'Right',
+    'Язык',
+    'Режим стрелок',
+  ],
+];
+
+const ruSmallShift = [
   [
     'ё',
     '1',
@@ -327,6 +485,110 @@ const ruSmall = [
     '0',
     '-',
     '=',
+    'BackSpace',
+  ],
+  [
+    'Tab',
+    'й',
+    'ц',
+    'у',
+    'к',
+    'е',
+    'н',
+    'г',
+    'ш',
+    'щ',
+    'з',
+    'х',
+    'ъ',
+    '\\',
+    'Del',
+  ],
+  ['CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter'],
+  ['Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', 'Up', 'Shift'],
+  [
+    'Ctrl',
+    'Win',
+    'Alt',
+    'Пробел',
+    'Alt',
+    'Win',
+    'Ctrl',
+    'Left',
+    'Down',
+    'Right',
+    'Язык',
+    'Режим стрелок',
+  ],
+];
+
+const ruSmallCaps = [
+  [
+    'ё',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '0',
+    '-',
+    '=',
+    'BackSpace',
+  ],
+  [
+    'Tab',
+    'й',
+    'ц',
+    'у',
+    'к',
+    'е',
+    'н',
+    'г',
+    'ш',
+    'щ',
+    'з',
+    'х',
+    'ъ',
+    '\\',
+    'Del',
+  ],
+  ['CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter'],
+  ['Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', 'Up', 'Shift'],
+  [
+    'Ctrl',
+    'Win',
+    'Alt',
+    'Пробел',
+    'Alt',
+    'Win',
+    'Ctrl',
+    'Left',
+    'Down',
+    'Right',
+    'Язык',
+    'Режим стрелок',
+  ],
+];
+
+const ruShiftCaps = [
+  [
+    '~',
+    '!',
+    '@',
+    '#',
+    '$',
+    '%',
+    '^',
+    '&',
+    '*',
+    '(',
+    ')',
+    '_',
+    '+',
     'BackSpace',
   ],
   [
@@ -465,21 +727,33 @@ window.addEventListener('load', () => {
     let keyboardLanguageBigKeys;
     let keyboardLanguageSmallkeys;
 
-    if (keyboardLanguage === 'Ru') {
-      if (keyboardCapitalisation) {
-        keyboardLanguageBigKeys = ruSmall;
-        keyboardLanguageSmallkeys = ruBig;
+    if (keyboardLanguage === 'En') {
+      if (isShiftPressed && isCapslockPressed) {
+        keyboardLanguageBigKeys = engBigCaps;
+        keyboardLanguageSmallkeys = eNshiftCaps; 
+      } else if (isShiftPressed && !isCapslockPressed) {
+        keyboardLanguageBigKeys = engSmallShift;
+        keyboardLanguageSmallkeys = engBigShift;
+      } else if (isCapslockPressed && !isShiftPressed) {
+        keyboardLanguageBigKeys = eNshiftCaps;
+        keyboardLanguageSmallkeys = engBigCaps;
       } else {
-        keyboardLanguageBigKeys = ruBig;
-        keyboardLanguageSmallkeys = ruSmall;
+        keyboardLanguageBigKeys = engBigShift;
+        keyboardLanguageSmallkeys = engSmallShift;
       }
-    } else if (keyboardLanguage === 'En') {
-      if (keyboardCapitalisation) {
-        keyboardLanguageBigKeys = engSmall;
-        keyboardLanguageSmallkeys = engBig;
+    } else if (keyboardLanguage === 'Ru') {
+      if (isShiftPressed && isCapslockPressed) {
+        keyboardLanguageBigKeys = ruBigCaps;
+        keyboardLanguageSmallkeys = ruShiftCaps; 
+      } else if (isShiftPressed && !isCapslockPressed) {
+        keyboardLanguageBigKeys = ruSmallShift;
+        keyboardLanguageSmallkeys = ruBigShift;
+      } else if (isCapslockPressed && !isShiftPressed) {
+        keyboardLanguageBigKeys = ruShiftCaps;
+        keyboardLanguageSmallkeys = ruBigCaps;
       } else {
-        keyboardLanguageBigKeys = engBig;
-        keyboardLanguageSmallkeys = engSmall;
+        keyboardLanguageBigKeys = ruBigShift;
+        keyboardLanguageSmallkeys = ruSmallShift;
       }
     }
 
